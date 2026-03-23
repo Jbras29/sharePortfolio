@@ -41,7 +41,7 @@ public class Administrateur {
         } else {
             System.out.println("Cette action est déjà disponible sur la plateforme.");
         }
-
+    }
         public void publierActionCompose(ActionCompose actionCompose) {
         if (!catalogue.contains(actionCompose)) {
             catalogue.add(actionCompose);
