@@ -17,6 +17,7 @@
 package fr.utc.miage.shares;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ActionCompose extends Action {
@@ -25,6 +26,7 @@ public class ActionCompose extends Action {
 
     public ActionCompose(String libelle) {
         super(libelle);
+        actions = new HashMap<>();
     }
 
     public Map<Action, Float> getActions() {
@@ -47,7 +49,7 @@ public class ActionCompose extends Action {
         for (float proportion : actions.values()) {
             totalProportion += proportion;
         }
-        return !(totalProportion > 1 || totalProportion < 0);
+        return !(totalProportion > 1 || totalProportion < 1);
     }
 
     public Float getProportion(Action action) {
@@ -97,7 +99,7 @@ public class ActionCompose extends Action {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ActionCompose [actions=");
+        sb.append("ActionCompose [libelle=").append(getLibelle()).append(", actions=[");
         for (Map.Entry<Action, Float> entry : actions.entrySet()) {
             sb.append(entry.getKey().getLibelle()).append(": ").append(entry.getValue()).append(", ");
         }
