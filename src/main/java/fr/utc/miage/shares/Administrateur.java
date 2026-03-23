@@ -16,61 +16,20 @@
 
 
 package fr.utc.miage.shares;
+
 import java.util.ArrayList;
 import java.util.List;
-public class Administrateur {
 
-    private String name;
-    private String firstName;
-    private ActionCompose actionCompose;
-    private ActionSimple action;
+public class Administrateur extends User {
+
     private List<Action> catalogue;
 
-     public Administrateur(String name, String firstName, ActionCompose actionCompose,ActionSimple action) {
-        this.name = name;
-        this.firstName = firstName;
-        this.actionCompose=actionCompose;
-        this.action=action;
+    public Administrateur(String name, String firstName) {
+        super(name, firstName); // appel du constructeur de User
         this.catalogue = new ArrayList<>();
     }
 
-     public String getName() {
-        return name;
-    }
-
-     public String getFirstName() {
-        return firstName;
-    }
-
-     public ActionCompose getActionCompose() {
-        return actionCompose;
-    }
-
-     public ActionSimple getActionSimple(){
-        return action;
-    }
-
-     public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setActionCompose(ActionCompose actionCompose) {
-        this.actionCompose = actionCompose;
-    }
-
-    public void setAction(ActionSimple action) {
-        this.action = action;
-    }
-
-    public void setCatalogue(List<Action> catalogue) {
-        this.catalogue = catalogue;
-    }
-
-     public void publierActionSimple(ActionSimple actionSimple) {
+    public void publierActionSimple(ActionSimple actionSimple) {
         if (!catalogue.contains(actionSimple)) {
             catalogue.add(actionSimple);
             System.out.println("Action simple '" + actionSimple.getLibelle() + "' publiée avec succès.");
@@ -78,17 +37,21 @@ public class Administrateur {
             System.out.println("Cette action est déjà disponible sur la plateforme.");
         }
     }
-        public void publierActionCompose(ActionCompose actionCompose) {
+
+    public void publierActionCompose(ActionCompose actionCompose) {
         if (!catalogue.contains(actionCompose)) {
             catalogue.add(actionCompose);
             System.out.println("Action composée '" + actionCompose.getLibelle() + "' publiée avec succès.");
         } else {
             System.out.println("Cette action est déjà disponible sur la plateforme.");
         }
-    
-        }
+    }
 
-        public List<Action> getCatalogue() {
+    public List<Action> getCatalogue() {
         return catalogue;
+    }
+
+    public void setCatalogue(List<Action> catalogue) {
+        this.catalogue = catalogue;
     }
 }

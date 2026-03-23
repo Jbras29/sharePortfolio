@@ -26,39 +26,39 @@ public class AdministrateurTest {
 
     @Test
     void testGetName() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         assertEquals("Doe", administrateur.getName());
     }
 
     @Test
     void testGetFirstName() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         assertEquals("John", administrateur.getFirstName());
     }
 
     @Test
     void testSetName() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         administrateur.setName("Smith");
         assertEquals("Smith", administrateur.getName());
     }
 
     @Test
     void testSetFirstName() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         administrateur.setFirstName("Jane");
         assertEquals("Jane", administrateur.getFirstName());
     }
 
     @Test
     void testCatalogueVideAuDepart() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         assertTrue(administrateur.getCatalogue().isEmpty());
     }
 
     @Test
     void testPublierActionSimple() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("Action France TV");
         administrateur.publierActionSimple(action);
         assertTrue(administrateur.getCatalogue().contains(action));
@@ -66,7 +66,7 @@ public class AdministrateurTest {
 
     @Test
     void testPublierActionSimpleDejaExistante() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("Action France TV");
         administrateur.publierActionSimple(action);
         administrateur.publierActionSimple(action);
@@ -75,7 +75,7 @@ public class AdministrateurTest {
 
     @Test
     void testPublierActionCompose() {
-        Administrateur administrateur = new Administrateur("Doe", "John", null, null);
+        Administrateur administrateur = new Administrateur("Doe", "John");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
         administrateur.publierActionCompose(actionCompose);
         assertTrue(administrateur.getCatalogue().contains(actionCompose));
