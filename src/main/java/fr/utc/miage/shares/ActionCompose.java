@@ -41,7 +41,7 @@ public class ActionCompose extends Action {
     @Override
     public float valeur(Jour j) {
         if (!isComposeValid()) {
-            throw new IllegalStateException("Total proportion cannot be less than 1 or exceed 1");
+            throw new IllegalStateException("La composition n'est pas valide : la somme des proportions doit être comprise entre 0 et 1");
         }
 
         float res = 0;
@@ -92,6 +92,24 @@ public class ActionCompose extends Action {
         return sb.toString();
     }
 
+    public boolean removeAction(Action action) {
+        if (!actions.containsKey(action)) {
+            return false; // Action does not exist
+        }
+        actions.remove(action);
+        return true;
+    }   
+
+    public boolean updateProportion(Action action, float newProportion) {
+        if (newProportion < 0 || newProportion > 1) {
+            throw new IllegalArgumentException("Proportion must be between 0 and 1");
+        }
+        if (!actions.containsKey(action)) {
+            return false; // Action does not exist
+        }
+        actions.put(action, newProportion);
+        return true;
+    }   
     
 
 }
