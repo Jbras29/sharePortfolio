@@ -60,7 +60,6 @@ public class Portefeuille {
         public boolean contientAction (Action action){
             return mapActions.containsKey(action);
         }
-        
 
         
 

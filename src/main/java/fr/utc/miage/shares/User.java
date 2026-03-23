@@ -16,16 +16,44 @@
 
 package fr.utc.miage.shares;
 
+import java.util.Map;
+
 public class User {
 
     private String name;
     private String firstName;
     private Portefeuille portefeuille;
 
-    public User(String name, String firstName, Portefeuille portefeuille) {
+    public User(String name, String firstName) {
         this.name = name;
         this.firstName = firstName;
+        this.portefeuille = new Portefeuille(name + " " + firstName, "Standard", Map.of());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Portefeuille getPortefeuille() {
+        return portefeuille;
+    }
+
+    public void setPortefeuille(Portefeuille portefeuille) {
         this.portefeuille = portefeuille;
     }
+    
+    
     
 }
