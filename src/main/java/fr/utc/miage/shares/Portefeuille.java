@@ -6,6 +6,7 @@ public class Portefeuille {
     private final String nom;
     private String type;
     private Map<Action, Integer> mapActions;
+    private float solde;
 
     public Portefeuille(final String nom, final String type, Map<Action, Integer> mapActions) {
         this.nom = nom;
@@ -26,6 +27,10 @@ public class Portefeuille {
             return mapActions;
         }
 
+        public float getSolde() {
+            return solde;
+        }
+
         public void setType(String type) {
             this.type=type;
         }
@@ -34,9 +39,13 @@ public class Portefeuille {
             this.mapActions=mapActions;
         }
 
+        public void setSolde(float solde) {
+            this.solde=solde;
+        }
+
         public String afficher(){
             if (mapActions.isEmpty()){
-                return "Le portefeuille" +nom+ "est vide";
+                return "Le portefeuille" +nom+ "est vide et son solde est de " +solde;
             }
             return "Le portefeuille " + nom + "contient des actions";
         }
@@ -46,6 +55,6 @@ public class Portefeuille {
         }
         
 
-        
+
 
 }
