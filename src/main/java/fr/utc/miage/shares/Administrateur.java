@@ -34,6 +34,42 @@ public class Administrateur {
         this.catalogue = new ArrayList<>();
     }
 
+     public String getName() {
+        return name;
+    }
+
+     public String getFirstName() {
+        return firstName;
+    }
+
+     public ActionCompose getActionCompose() {
+        return actionCompose;
+    }
+
+     public ActionSimple getActionSimple(){
+        return action;
+    }
+
+     public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setActionCompose(ActionCompose actionCompose) {
+        this.actionCompose = actionCompose;
+    }
+
+    public void setAction(ActionSimple action) {
+        this.action = action;
+    }
+
+    public void setCatalogue(List<Action> catalogue) {
+        this.catalogue = catalogue;
+    }
+
      public void publierActionSimple(ActionSimple actionSimple) {
         if (!catalogue.contains(actionSimple)) {
             catalogue.add(actionSimple);
