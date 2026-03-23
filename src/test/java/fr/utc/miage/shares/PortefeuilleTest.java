@@ -147,4 +147,49 @@ class PortefeuilleTest {
             System.setOut(originalOut);
         }
     }
+
+    @Test
+    void testVendreActionsWithSufficientQuantity() {
+        Action actionMSFT = new ActionSimple("Microsoft");
+        assertDoesNotThrow(() -> portefeuille.acheterAction(actionMSFT, 10));
+        assertDoesNotThrow(() -> portefeuille.vendreAction(actionMSFT, 5));
+        assertEquals(5, portefeuille.getMapActions().get(actionMSFT));
+    }
+
+    @Test
+    void testVendreActionsWithAllQuantity() {
+        Action actionMSFT = new ActionSimple("Microsoft");
+        assertDoesNotThrow(() -> portefeuille.acheterAction(actionMSFT, 10));
+        assertDoesNotThrow(() -> portefeuille.vendreAction(actionMSFT, 10));
+        assertFalse(portefeuille.getMapActions().containsKey(actionMSFT));
+    }
+
+    @Test
+    void testVendreActionsWithSuperiorQuantity() {
+        Action actionMSFT = new ActionSimple("Microsoft");
+        assertDoesNotThrow(() -> portefeuille.acheterAction(actionMSFT, 10));
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.vendreAction(actionMSFT, 15));
+    }
+
+    @Test
+    void testVendreActionsWithUnpossessedAction() {
+        Action actionMSFT = new ActionSimple("Microsoft");
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.vendreAction(actionMSFT, 15));
+    }
+
+    @Test
+    void testVendreActionsWithInvalidQuantity() {
+        Action actionMSFT = new ActionSimple("Microsoft");
+        assertDoesNotThrow(() -> portefeuille.acheterAction(actionMSFT, 10));
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.vendreAction(actionMSFT, 0));
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.vendreAction(actionMSFT, -5));
+    }
+
+    @Test
+    void testVendreActionsWithSufficientQuantityReturnsTrue() {
+        Action actionMSFT = new ActionSimple("Microsoft");
+        assertDoesNotThrow(() -> portefeuille.acheterAction(actionMSFT, 10));
+        assertTrue(portefeuille.vendreAction(actionMSFT, 5));
+        assertEquals(5, portefeuille.getMapActions().get(actionMSFT));
+    }
 }

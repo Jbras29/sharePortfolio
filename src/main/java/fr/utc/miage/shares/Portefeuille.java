@@ -126,7 +126,28 @@ public class Portefeuille {
         }
     }
 
+    public boolean vendreAction(Action action, int quantite) {
+        // Vérification de la validité de la quantité
+        if (quantite <= 0) {
+            throw new IllegalArgumentException("La quantité à vendre doit être strictement positive.");
+        }
 
-        
+        // Vérification que l'action existe dans le portefeuille
+        if (!this.mapActions.containsKey(action)) {
+            throw new IllegalArgumentException("L'action n'existe pas dans le portefeuille.");
+        }
+
+        int quantiteActuelle = this.mapActions.get(action);
+        if (quantite > quantiteActuelle) {
+            throw new IllegalArgumentException("La quantité à vendre dépasse la quantité détenue.");
+        } else if (quantite == quantiteActuelle) {
+            // Si on vend toute la quantité, on retire l'action du portefeuille
+            this.mapActions.remove(action);
+        } else {
+            // Sinon, on met à jour la quantité restante
+            this.mapActions.put(action, quantiteActuelle - quantite);
+        }
+        return true;
+    }
 
 }
