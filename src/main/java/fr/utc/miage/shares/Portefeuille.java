@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class Portefeuille {
     private final String nom;
-    private final String type;
-    private final Map<Action, Integer> mapActions;
+    private String type;
+    private Map<Action, Integer> mapActions;
 
     public Portefeuille(final String nom, final String type, Map<Action, Integer> mapActions) {
         this.nom = nom;
@@ -26,17 +26,24 @@ public class Portefeuille {
             return mapActions;
         }
 
-        public String setNom(String nom) {
-            return this.nom;
+        public void setType(String type) {
+            this.type=type;
         }
 
-        public String setType(String type) {
-            return this.type;
+        public void setMapActions(Map<Action, Integer> mapActions) {
+            this.mapActions=mapActions;
         }
 
-        public Map<Action, Integer> setMapActions(Map<Action, Integer> mapActions) {
-            return this.mapActions;
+        public String afficher(){
+            if (mapActions.isEmpty()){
+                return "Le portefeuille" +nom+ "est vide";
+            }
+            return "Le portefeuille " + nom + "contient des actions";
         }
 
+        public boolean contientAction (Action action){
+            return mapActions.containsKey(action);
+        }
         
+
 }
