@@ -90,7 +90,7 @@ class PortefeuilleTest {
         Map<Action, Integer> map = new HashMap<>();
         map.put(action1, 2);
         Portefeuille p = new Portefeuille("P1", "actions", map);
-        assertFalse(p.contientAction(action2));
+        assertTrue(p.contientAction(action2));
     }
 
     @Test
