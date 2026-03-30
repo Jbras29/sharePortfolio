@@ -67,4 +67,13 @@ public class UserTest {
         user.setPortefeuille(portefeuille);
         assertEquals(portefeuille, user.getPortefeuille());
     }
+
+    @Test
+    void testGetInfoAction() {
+        User user = new User("Doe", "John");
+        Action action = new ActionSimple("Action France TV");
+        ActionDTO actionDTO = user.getInfoAction(action);
+        assertEquals("Action France TV", actionDTO.libelle());
+        assertEquals(TypeAction.SIMPLE, actionDTO.typeAction());
+    }
 }

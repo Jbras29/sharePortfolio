@@ -16,6 +16,7 @@
 
 package fr.utc.miage.shares;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public class User {
@@ -54,6 +55,11 @@ public class User {
         this.portefeuille = portefeuille;
     }
     
+    public ActionDTO getInfoAction(Action action) {
+    LocalDate today = LocalDate.now();
+    Jour jourActuel = new Jour(today.getYear(), today.getDayOfYear());
+    return new ActionDTO(action.getLibelle(), action.getTypeAction(), action.valeur(jourActuel));
+}
     
     
 }
