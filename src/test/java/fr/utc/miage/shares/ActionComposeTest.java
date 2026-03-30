@@ -26,20 +26,20 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ActionComposeTest {
-    private static final String TestActionCompose = "CAC40";
-    private static final String TestAction1 = "EDF";
-    private static final String TestAction2 = "Total";
+    private static final String TEST_ACTION_COMPOSE = "CAC40";
+    private static final String TEST_ACTION_1 = "EDF";
+    private static final String TEST_ACTION_2 = "Total";
 
     @Test
     void testConstructorShouldntThrowException() {
-        assertDoesNotThrow(() -> new ActionCompose(TestActionCompose));
+        assertDoesNotThrow(() -> new ActionCompose(TEST_ACTION_COMPOSE));
     }
 
     @Test
     void testAddActionWithValidValuesShouldReturnTrue() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -47,9 +47,9 @@ class ActionComposeTest {
 
     @Test
     void testGetActionsShouldReturnMap() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -63,8 +63,8 @@ class ActionComposeTest {
 
     @Test
     void testAddActionWithInvalidProportionShouldThrowException() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
 
         assertThrows(IllegalArgumentException.class, () -> actionCompose.addAction(action1, -0.1f));
         assertThrows(IllegalArgumentException.class, () -> actionCompose.addAction(action1, 1.1f));
@@ -72,8 +72,8 @@ class ActionComposeTest {
 
     @Test
     void testAddActionWithAlreadyExistingActionShouldReturnFalse() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(!actionCompose.addAction(action1, 0.5f));
@@ -81,9 +81,9 @@ class ActionComposeTest {
 
     @Test
     void testIsComposeValidWithValidProportionsShouldReturnTrue() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -93,9 +93,9 @@ class ActionComposeTest {
 
     @Test
     void testIsComposeValidWithOverProportionsShouldReturnFalse() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.7f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -105,9 +105,9 @@ class ActionComposeTest {
 
     @Test
     void testIsComposeValidWithUnderProportionsShouldReturnFalse() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.1f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -117,8 +117,8 @@ class ActionComposeTest {
 
     @Test
     void testGetProportionWithExistingActionShouldReturnProportion() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
 
         Float proportion = 0.5f;
 
@@ -129,9 +129,9 @@ class ActionComposeTest {
 
     @Test
     void testValeurWithValidCompositionShouldReturnCorrectValue() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -144,9 +144,9 @@ class ActionComposeTest {
 
     @Test
     void testValeurWithInvalidCompositionShouldThrowIllegalStateException() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.1f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -157,10 +157,10 @@ class ActionComposeTest {
 
     @Test
     void testEqualsAndHashCode() {
-        ActionCompose actionCompose1 = new ActionCompose(TestActionCompose);
-        ActionCompose actionCompose2 = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose1 = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionCompose actionCompose2 = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose1.addAction(action1, 0.5f));
         assertTrue(actionCompose1.addAction(action2, 0.5f));
@@ -173,14 +173,14 @@ class ActionComposeTest {
 
     @Test
     void testToString() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
 
-        String expectedString = "ActionCompose [libelle=" + TestActionCompose + ", actions=["
+        String expectedString = "ActionCompose [libelle=" + TEST_ACTION_COMPOSE + ", actions=["
                 + action2.toString() + ": 0.5, " + action1.toString() + ": 0.5]";
 
         assertEquals(expectedString, actionCompose.toString());
@@ -188,9 +188,9 @@ class ActionComposeTest {
 
     @Test
     void testRemoveActionWithExistingActionShouldReturnTrue() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
@@ -201,9 +201,9 @@ class ActionComposeTest {
 
     @Test
     void testRemoveActionWithNonExistingActionShouldReturnFalse() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
 
@@ -212,8 +212,8 @@ class ActionComposeTest {
 
     @Test
     void testUpdateProportionWithExistingActionShouldReturnTrue() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
 
@@ -223,16 +223,16 @@ class ActionComposeTest {
 
     @Test
     void testUpdateProportionWithNonExistingActionShouldReturnFalse() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
 
         assertFalse(actionCompose.updateProportion(action1, 0.7f));
     }
 
     @Test
     void testUpdateProportionWithInvalidProportionShouldThrowException() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
 
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertThrows(IllegalArgumentException.class, () -> actionCompose.updateProportion(action1, -0.1f));
@@ -240,9 +240,9 @@ class ActionComposeTest {
 
     @Test
     void valeurcompositionAvecCoursretourneValeurCorrecte() {
-        ActionCompose actionCompose = new ActionCompose(TestActionCompose);
-        ActionSimple action1 = new ActionSimple(TestAction1);
-        ActionSimple action2 = new ActionSimple(TestAction2);
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
 
         Jour jour = new Jour(2025, 3, 23);
         action1.enrgCours(jour, 100f);
