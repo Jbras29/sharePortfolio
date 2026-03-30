@@ -242,7 +242,7 @@ public class UserTest {
     public void testRechercherActionParNom_CatalogueVide() {
         User user = new User("Dupont", "Jean");
 
-        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");
+        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");}
 
 @Test
 void getPrixAction_actionEtJourValides_retourneValeurCorrecte() {
