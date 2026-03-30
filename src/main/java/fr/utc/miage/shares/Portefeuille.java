@@ -30,7 +30,7 @@ public class Portefeuille {
         this.nom = nom;
         this.type = type;
         this.mapActions = mapActions;
-
+        this.mapActionsInitial = new HashMap<>();
     }
 
     public String getNom() {
