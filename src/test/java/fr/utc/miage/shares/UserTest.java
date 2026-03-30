@@ -15,6 +15,12 @@
  */
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -169,6 +175,92 @@ public class UserTest {
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
 
+
+    // Test pour RechercheActionParNom
+    @Test
+    public void testRechercherActionParNom_ActionSimpleExistante() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
+
+        admin.publierAction(new ActionSimple("Apple"));
+
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), "Apple");
+
+        assertTrue(resultat.isPresent());
+        assertEquals("Apple", resultat.get().getLibelle());
+        assertTrue(resultat.get() instanceof ActionSimple);
+    }
+
+    @Test
+    public void testRechercherActionParNom_ActionComposeeExistante() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
+
+        admin.publierAction(new ActionCompose("Tech"));
+
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), "Tech");
+
+        assertTrue(resultat.isPresent());
+        assertEquals("Tech", resultat.get().getLibelle());
+        assertTrue(resultat.get() instanceof ActionCompose);
+    }
+
+    @Test
+    public void testRechercherActionParNom_ActionInexistante() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
+
+        admin.publierAction(new ActionSimple("Apple"));
+
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), "Tesla");
+
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_NomNull() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
+
+        admin.publierAction(new ActionSimple("Apple"));
+
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), null);
+
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_CatalogueNull() {
+        User user = new User("Dupont", "Jean");
+
+        Optional<Action> resultat = user.rechercherActionParNom(null, "Apple");
+
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_CatalogueVide() {
+        User user = new User("Dupont", "Jean");
+
+        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");
+
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_ActionNullDansCatalogue() {
+        User user = new User("Dupont", "Jean");
+        List<Action> catalogue = new ArrayList<>();
+
+        catalogue.add(null);
+        catalogue.add(new ActionSimple("Apple"));
+
+        Optional<Action> resultat = user.rechercherActionParNom(catalogue, "Apple");
+
+        assertTrue(resultat.isPresent());
+        assertEquals("Apple", resultat.get().getLibelle());
+    }
+  
     @Test
     void getInfoAction_actionSimple_retourneTypeSimple() {
         User user = new User("Doe", "John");
