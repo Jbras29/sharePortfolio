@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -172,7 +173,8 @@ public class UserTest {
     void getInfoAction_actionSimple_retourneTypeSimple() {
         User user = new User("Doe", "John");
         ActionSimple action = new ActionSimple("Apple");
-        Jour jour = new Jour(2025, 1, 1);
+        LocalDate today = LocalDate.now();
+        Jour jour = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
         action.enrgCours(jour, 100f);
 
         ActionDTO dto = user.getInfoAction(action);
