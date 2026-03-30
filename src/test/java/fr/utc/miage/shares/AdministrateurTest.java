@@ -98,7 +98,7 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 0.5f);
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
         assertTrue(actionCompose.getActions().containsKey(actionSimple));
         assertEquals(0.5f, actionCompose.getActions().get(actionSimple));
     }
@@ -108,7 +108,7 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 1.5f));
+        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 1.5f));
     }
 
     @Test
@@ -116,8 +116,8 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 0.5f);
-        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 0.5f));
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f));
     }
 
     @Test
@@ -125,8 +125,8 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 0.5f);
-        administrateur.updatePourcentageActionComposée(actionCompose, actionSimple, 0.7f);
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 0.7f);
         assertEquals(0.7f, actionCompose.getActions().get(actionSimple));
     }
 
@@ -135,8 +135,8 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 0.5f);
-        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposée(actionCompose, actionSimple, 1.5f));
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 1.5f));
     }
 
     @Test
@@ -144,8 +144,8 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposée(actionCompose, actionSimple, 0.5f);
-        administrateur.supprimerActionComposée(actionCompose, actionSimple);
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        administrateur.supprimerActionComposee(actionCompose, actionSimple);
         assertFalse(actionCompose.getActions().containsKey(actionSimple));
     }  
 
@@ -154,6 +154,6 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerActionComposée(actionCompose, actionSimple));
+        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerActionComposee(actionCompose, actionSimple));
     }  
 }

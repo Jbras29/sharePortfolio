@@ -46,7 +46,7 @@ public class Administrateur extends User {
         this.catalogue = catalogue;
     }
 
-    public void ajouterPourcentageActionComposée (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
+    public void ajouterPourcentageActionComposee (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
         if (actionCompose.addAction(actionSimple, pourcentage)) {
             System.out.println("Action '" + actionSimple.getLibelle() + "' ajoutée à l'action composée '" + actionCompose.getLibelle() + "' avec un pourcentage de " + pourcentage);
         } else {
@@ -55,7 +55,7 @@ public class Administrateur extends User {
         }
     }
 
-    public void updatePourcentageActionComposée (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
+    public void updatePourcentageActionComposee (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
         if (actionCompose.updateProportion(actionSimple, pourcentage)) {
             System.out.println("Pourcentage de l'action '" + actionSimple.getLibelle() + "' dans l'action composée '" + actionCompose.getLibelle() + "' mis à jour à " + pourcentage);
         } else {
@@ -64,7 +64,7 @@ public class Administrateur extends User {
         }
     }
 
-    public void supprimerActionComposée (ActionCompose actionCompose, ActionSimple actionSimple) {
+    public void supprimerActionComposee (ActionCompose actionCompose, ActionSimple actionSimple) {
         if (actionCompose.removeAction(actionSimple)) {
             System.out.println("Action '" + actionSimple.getLibelle() + "' supprimée de l'action composée '" + actionCompose.getLibelle() + "'.");
         } else {
