@@ -17,10 +17,10 @@
 package fr.utc.miage.shares;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 public class User {
 
     private String name;
@@ -92,5 +92,14 @@ public class User {
         throw new IllegalArgumentException("L'action ne peut pas être nulle.");
     }
     return this.favoris.add(action); 
+}
+
+// ComparaisonPortefeuille
+    public float comparerValeurPortefeuille(Jour dateDebut, Jour dateFin) {
+        if (dateDebut == null || dateFin == null) {
+            throw new IllegalArgumentException("Les dates ne peuvent pas être nulles.");
+        }
+
+        return valeurPortefeuille(dateFin) - valeurPortefeuille(dateDebut);
 }
 }

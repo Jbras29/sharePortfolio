@@ -15,14 +15,13 @@
  */
 package fr.utc.miage.shares;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
@@ -166,4 +165,54 @@ public class UserTest {
 
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
+
+    @Test
+    public void testGetInfoAction_ActionNull() {
+        User user = new User("Dupont", "Jean");
+
+        assertThrows(NullPointerException.class, () -> {
+            user.getInfoAction(null);
+        });
 }
+
+
+    // Test ComparaisonPortefeuille
+
+    @Test
+    public void testComparerValeurPortefeuille_Augmentation() {
+        User user = new User("Dupont", "Jean");
+
+        ActionSimple apple = new ActionSimple("Apple");
+        Jour dateDebut = new Jour(2025, 1, 1);
+        Jour dateFin = new Jour(2025, 1, 2);
+
+        apple.enregistrerCours(dateDebut, 100.0f);
+        apple.enregistrerCours(dateFin, 150.0f);
+
+        user.getPortefeuille().getMapActions().put(apple, 2);
+
+        float resultat = user.comparerValeurPortefeuille(dateDebut, dateFin);
+
+        assertEquals(100.0f, resultat);
+    }
+
+    @Test
+    public void testComparerValeurPortefeuille_DateDebutNull() {
+        User user = new User("Dupont", "Jean");
+        Jour dateFin = new Jour(2025, 1, 2);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            user.comparerValeurPortefeuille(null, dateFin);
+        });
+    }
+
+    @Test
+    public void testComparerValeurPortefeuille_DateFinNull() {
+        User user = new User("Dupont", "Jean");
+        Jour dateDebut = new Jour(2025, 1, 1);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            user.comparerValeurPortefeuille(dateDebut, null);
+        });
+    }
+    }
