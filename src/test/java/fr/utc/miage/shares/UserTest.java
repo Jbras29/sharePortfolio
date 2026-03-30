@@ -242,57 +242,58 @@ public class UserTest {
     public void testRechercherActionParNom_CatalogueVide() {
         User user = new User("Dupont", "Jean");
 
-        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");}
+        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");
+        assertTrue(resultat.isEmpty());}
 
-@Test
-void getPrixAction_actionEtJourValides_retourneValeurCorrecte() {
-    User user = new User("Doe", "John");
-    ActionSimple action = new ActionSimple("Apple");
-    Jour jour = new Jour(2025, 3,2);
-    action.enrgCours(jour,160);
+    @Test
+    void getPrixAction_actionEtJourValides_retourneValeurCorrecte() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        Jour jour = new Jour(2025, 3,2);
+        action.enrgCours(jour,160);
 
-    float result = user.getPrixAction(action, jour);
+        float result = user.getPrixAction(action, jour);
 
-    assertEquals(160, result);
-}
+        assertEquals(160, result);
+    }
 
-@Test 
-void getPrixAction_actionNull(){
-    User user= new User("Smith", "John");
-    Jour jour = new Jour(2025,4,3);
-    assertThrows(IllegalArgumentException.class, ()->user.getPrixAction(null, jour));
-}
+    @Test 
+    void getPrixAction_actionNull(){
+        User user= new User("Smith", "John");
+        Jour jour = new Jour(2025,4,3);
+        assertThrows(IllegalArgumentException.class, ()->user.getPrixAction(null, jour));
+    }
 
-@Test
-void getPrixAction_jourNull_leveException() {
-    User user = new User("Doe", "John");
-    ActionSimple action = new ActionSimple("Apple");
+    @Test
+    void getPrixAction_jourNull_leveException() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
 
-    assertThrows(IllegalArgumentException.class, () -> user.getPrixAction(action, null));
-}
+        assertThrows(IllegalArgumentException.class, () -> user.getPrixAction(action, null));
+    }
 
-@Test 
-void getPrixAction_jourSansCours_retourneZero() {
-    User user = new User("Doe", "John");
-    ActionSimple action = new ActionSimple("Apple");
-    Jour jour = new Jour(2025, 5,17);
+    @Test 
+    void getPrixAction_jourSansCours_retourneZero() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        Jour jour = new Jour(2025, 5,17);
 
-    float result = user.getPrixAction(action, jour);
+        float result = user.getPrixAction(action, jour);
 
-    assertEquals(0, result);
-}
+        assertEquals(0, result);
+    }
 
-@Test 
-void getPrixAction_plusieursJours(){
-    User user = new User("Smith","Jason");
-    ActionSimple action=new ActionSimple("Tesla");
-    Jour jour1 = new Jour(2025, 3, 14);
-    Jour jour2= new Jour(2025, 7, 23);
+    @Test 
+    void getPrixAction_plusieursJours(){
+        User user = new User("Smith","Jason");
+        ActionSimple action=new ActionSimple("Tesla");
+        Jour jour1 = new Jour(2025, 3, 14);
+        Jour jour2= new Jour(2025, 7, 23);
 
-    action.enrgCours(jour1, 100);
-    action.enrgCours(jour2, 200);
+        action.enrgCours(jour1, 100);
+        action.enrgCours(jour2, 200);
 
-    assertEquals(100,user.getPrixAction(action, jour1));
-    assertEquals(200,user.getPrixAction(action, jour2));
-}
+        assertEquals(100,user.getPrixAction(action, jour1));
+        assertEquals(200,user.getPrixAction(action, jour2));
+    }
 }
