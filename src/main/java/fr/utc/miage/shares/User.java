@@ -53,15 +53,10 @@ public class User {
 
     public void setPortefeuille(Portefeuille portefeuille) {
         this.portefeuille = portefeuille;
-    }
-
+    } 
+    // Dans cette methode nous retournons l'ensemble des actions et la quantite de l'utilisateur
     public Map<Action, Integer> quantitePossede() {
-    Map<Action, Integer> result = new HashMap<>();
     
-    if (portefeuille != null) {
-        result.putAll(portefeuille.getMapActions());
-    }
-    
-    return result;
+    return this.portefeuille.getMapActions();
 }
 }
