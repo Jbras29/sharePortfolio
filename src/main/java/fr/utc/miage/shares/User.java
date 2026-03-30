@@ -93,4 +93,15 @@ public class User {
     }
     return this.favoris.add(action); 
 }
+    public boolean supprimerFavori(Action action) {
+    if (action == null) {
+        throw new IllegalArgumentException("L'action ne peut pas être nulle.");
+    }
+    return this.favoris.remove(action);
+}
+
+public boolean estFavori(Action action) {
+    return this.favoris.contains(action);
+}
+
 }
