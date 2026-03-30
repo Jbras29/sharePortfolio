@@ -36,6 +36,7 @@ public class ActionSimple extends Action {
         super(libelle);
         // init spécifique
         this.mapCours = new HashMap<>();
+        this.typeAction = TypeAction.SIMPLE;
     }
 
     // enrg possible si pas de cours pour ce jour
