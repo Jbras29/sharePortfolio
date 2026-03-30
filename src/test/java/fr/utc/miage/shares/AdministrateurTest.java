@@ -148,4 +148,12 @@ public class AdministrateurTest {
         administrateur.supprimerActionComposée(actionCompose, actionSimple);
         assertFalse(actionCompose.getActions().containsKey(actionSimple));
     }  
+
+    @Test
+    void testSupprimerPourcentageActionComposeAvecActionNonExistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerActionComposée(actionCompose, actionSimple));
+    }  
 }
