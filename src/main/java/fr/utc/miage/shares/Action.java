@@ -106,7 +106,7 @@ public abstract class Action {
     public TypeAction simpleOuComposee() {
         if (typeAction == TypeAction.SIMPLE) {
             LOGGER.info("L'action '" + getLibelle() + "' est une action simple.");
-        } else if (typeAction == TypeAction.COMPOSE) {
+        } else {
             LOGGER.info("L'action '" + getLibelle() + "' est une action composée.");
         }
         return typeAction;
