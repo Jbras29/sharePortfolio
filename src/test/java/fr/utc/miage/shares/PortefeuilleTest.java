@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -226,4 +227,43 @@ class PortefeuilleTest {
         assertTrue(pourcentages.containsKey(actionD));
         assertTrue(pourcentages.containsKey(actionE));
     }
+
+    @Test
+    void getActionsSortedByName_portefeuilleVide_retourneListeVide() {
+        Portefeuille portefeuille = new Portefeuille("Test", "Standard", new HashMap<>());
+
+        List<Action> result = portefeuille.getActionsSortedByName();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
+
+    @Test
+    void getActionsSortedByName_plusieursActions_retourneListeTriee() {
+        Portefeuille portefeuille = new Portefeuille("Test", "Standard", new HashMap<>());
+        ActionSimple actionC = new ActionSimple("Google");
+        ActionSimple actionA = new ActionSimple("Apple");
+        ActionSimple actionB = new ActionSimple("Facebook");
+        portefeuille.acheterAction(actionC, 1);
+        portefeuille.acheterAction(actionA, 1);
+        portefeuille.acheterAction(actionB, 1);
+
+        List<Action> result = portefeuille.getActionsSortedByName();
+
+        assertEquals("Apple", result.get(0).getLibelle());
+        assertEquals("Facebook", result.get(1).getLibelle());
+        assertEquals("Google", result.get(2).getLibelle());
+    }
+
+    @Test
+    void getActionsSortedByName_uneAction_retourneListeUneAction() {
+        Portefeuille portefeuille = new Portefeuille("Test", "Standard", new HashMap<>());
+        ActionSimple action = new ActionSimple("Apple");
+        portefeuille.acheterAction(action, 3);
+
+        List<Action> result = portefeuille.getActionsSortedByName();
+
+        assertEquals(1, result.size());
+        assertEquals("Apple", result.get(0).getLibelle());
+    }
+}
