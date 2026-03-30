@@ -109,7 +109,51 @@ class PortefeuilleTest {
         });
     }
 
+    @Test
+    void testAcheterActionActionNulle() {
+        // Initialisation du portefeuille
+
+
+        // On vérifie que l'appel avec 'null' lève bien une IllegalArgumentException
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            portefeuille.acheterAction(null, 10);
+        });
+
+        // Vérification que le message d'erreur est exactement celui attendu
+        assertEquals("L'action à acheter ne peut pas être nulle.", exception.getMessage());
+    }
+
+
+
     // --- TESTS D'AFFICHAGE ET SORTIE ---
+    @Test
+    void testAfficherPourcentagePortefeuilleValeurZero() {
+        // Initialisation du portefeuille (supposé vide au départ)
+
+        Jour jourJ = new Jour(2026, 3, 30);
+
+        /* * CAS 1 : Portefeuille vide.
+         * La boucle ne s'exécute pas, valeurTotale reste à 0.
+         */
+        Map<Action, Double> resultVide = portefeuille.afficherPourcentagePortefeuille(jourJ);
+
+        // Vérification : La map doit être vide
+        assertTrue(resultVide.isEmpty(), "Le résultat doit être une map vide si le portefeuille est vide.");
+        assertEquals(0, resultVide.size(), "La taille doit être 0.");
+
+        /* * CAS 2 : Portefeuille avec une action dont la valeur est 0.
+         * On ajoute une action mais on s'assure que son prix ce jour-là est 0.
+         */
+        ActionSimple actionGratuite = new ActionSimple("ActionGratuite");
+        actionGratuite.enregistrerCours(jourJ, 0f); // Prix à 0
+        portefeuille.acheterAction(actionGratuite, 10); // Quantité 10, mais prix 0 -> Total 0
+
+        Map<Action, Double> resultValeurNulle = portefeuille.afficherPourcentagePortefeuille(jourJ);
+
+        // Vérification : Même avec une action, si le total est 0, on doit retourner une map vide
+        assertTrue(resultValeurNulle.isEmpty(), "Le résultat doit être vide si la valeur totale du portefeuille est 0.");
+    }
+
 
     @Test
     void testAfficherPortefeuilleVide() {
