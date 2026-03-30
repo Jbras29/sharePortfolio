@@ -245,6 +245,22 @@ class AdministrateurTest {
     }
 
     @Test
+    void testUpdateActionLibelle_ActionAbsenteDuCatalogue() {
+        Administrateur admin = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("AncienNom");
+        Set<Action> catalogue = new HashSet<>();
+
+        String nouveauNom = "NouveauNom";
+
+        // Branche else: l'action n'est pas présente dans le catalogue
+        admin.updateActionLibelle(catalogue, action, nouveauNom);
+
+        assertEquals(nouveauNom, action.getLibelle(), "Le libellé aurait dû changer même si l'action est absente du Set");
+        assertFalse(catalogue.contains(action), "L'action ne doit pas être ajoutée au Set dans la branche else");
+        assertEquals(0, catalogue.size(), "Le Set doit rester vide");
+    }
+
+    @Test
     void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionsWithoutCourse() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");

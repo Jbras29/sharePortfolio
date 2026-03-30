@@ -67,9 +67,7 @@ public class User {
 
     public Map<Action, Integer> quantitePossede() {
         Map<Action, Integer> result = new HashMap<>();
-        if (portefeuille != null) {
-            result.putAll(portefeuille.getMapActions());
-        }
+        result.putAll(portefeuille.getMapActions());
         return result;
     }
 
