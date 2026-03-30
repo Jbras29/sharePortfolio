@@ -16,9 +16,12 @@
 
 package fr.utc.miage.shares;
 
-import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+
 
 public class Portefeuille {
     private final String nom;
@@ -210,72 +213,10 @@ public class Portefeuille {
         return true;
     }
 
-    public Map<Action, Float> getMapActionsInitial() {
-        return mapActionsInitial;
-    }
-
-    public void setMapActionsInitial(Map<Action, Float> mapActionsInitial) {
-        this.mapActionsInitial = mapActionsInitial;
-    }
-
-    /**
-     * Calcule le gain/perte en cours pour une action donnée.
-     *
-     * @param action L'action concernée
-     * @param jour Le jour de valorisation
-     * @return le gain en dollars (peut être négatif)
-     */
-    public float calculerGainEnCours(Action action, Jour jour) {
-        if (action == null) {
-            throw new IllegalArgumentException("L'action ne peut pas être nulle.");
-        }
-        if (jour == null) {
-            throw new IllegalArgumentException("Le jour ne peut pas être nul.");
-        }
-        if (!this.mapActions.containsKey(action)) {
-            throw new IllegalArgumentException("L'action n'existe pas dans le portefeuille.");
-        }
-
-        int quantite = this.mapActions.get(action);
-        float valeurActuelle = action.valeur(jour) * quantite;
-        float valeurInitiale = this.mapActionsInitial.getOrDefault(action, 0f);
-        return valeurActuelle - valeurInitiale;
-    }
-
-    /**
-     * Calcule le gain/perte total(e) en cours du portefeuille.
-     *
-     * @param jour Le jour de valorisation
-     * @return le gain total en dollars (peut être négatif)
-     */
-    public float calculerGainTotalEnCours(Jour jour) {
-        if (jour == null) {
-            throw new IllegalArgumentException("Le jour ne peut pas être nul.");
-        }
-
-        float gainTotal = 0f;
-        for (Action action : this.mapActions.keySet()) {
-            gainTotal += calculerGainEnCours(action, jour);
-        }
-        return gainTotal;
-    }
-
-    /**
-     * Calcule le gain/perte en cours pour chaque action du portefeuille.
-     *
-     * @param jour Le jour de valorisation
-     * @return une map Action -> gain en dollars
-     */
-    public Map<Action, Float> calculerGainEnCoursParAction(Jour jour) {
-        if (jour == null) {
-            throw new IllegalArgumentException("Le jour ne peut pas être nul.");
-        }
-
-        Map<Action, Float> gainsParAction = new HashMap<>();
-        for (Action action : this.mapActions.keySet()) {
-            gainsParAction.put(action, calculerGainEnCours(action, jour));
-        }
-        return gainsParAction;
+    public List<Action> getActionsSortedByName() {
+        return this.mapActions.keySet().stream()
+                .sorted(Comparator.comparing(Action::getLibelle))
+                .collect(java.util.stream.Collectors.toList());
     }
 
 }
