@@ -17,6 +17,7 @@ package fr.utc.miage.shares;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Permet la création d'objets Action simples.
@@ -68,5 +69,35 @@ public class ActionSimple extends Action {
     public float valeur(final Jour j) {
         // Utilisation de getOrDefault pour simplifier le code
         return this.mapCours.getOrDefault(j, DEFAULT_ACTION_VALUE);
+    }
+
+    public Map<Jour, Float> getHistoriqueCours(Jour dateDebut, Jour dateFin) {
+        /* Utilisation d'un TreeMap pour garantir que les dates sont dans l'ordre chronologique */
+        Map<Jour, Float> historique = new TreeMap<>();
+
+        /* Parcours de tous les cours enregistrés pour cette action */
+        for (Map.Entry<Jour, Float> entry : this.mapCours.entrySet()) {
+            Jour j = entry.getKey();
+
+            /* Vérification si le jour se situe dans l'intervalle [dateDebut, dateFin] */
+            if (j.compareTo(dateDebut) >= 0 && j.compareTo(dateFin) <= 0) {
+                historique.put(j, entry.getValue());
+            }
+        }
+
+        return historique;
+    }
+
+    public void afficherAnalyseCourbe(Jour debut, Jour fin) {
+        Map<Jour, Float> points = getHistoriqueCours(debut, fin);
+
+        System.out.println("--- Analyse de l'action : " + this.getLibelle() + " ---");
+
+        /* On parcourt les points triés pour simuler l'évolution */
+        points.forEach((jour, valeur) -> {
+            /* On affiche la date et une barre proportionnelle pour "voir" la courbe */
+            String barre = "I".repeat((int) (valeur / 10)); // Simple représentation visuelle
+            System.out.printf("%10s | %8.2f€ | %s%n", jour.toString(), valeur, barre);
+        });
     }
 }
