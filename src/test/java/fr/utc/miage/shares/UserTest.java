@@ -263,6 +263,14 @@ void getPrixAction_actionNull(){
     assertThrows(IllegalArgumentException.class, ()->user.getPrixAction(null, jour));
 }
 
+@Test
+void getPrixAction_jourNull_leveException() {
+    User user = new User("Doe", "John");
+    ActionSimple action = new ActionSimple("Apple");
+
+    assertThrows(IllegalArgumentException.class, () -> user.getPrixAction(action, null));
+}
+
 @Test 
 void getPrixAction_jourSansCours_retourneZero() {
     User user = new User("Doe", "John");
