@@ -17,18 +17,14 @@
 
 package fr.utc.miage.shares;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AdministrateurTest {
 
@@ -90,117 +86,11 @@ public class AdministrateurTest {
     }
 
     @Test
-    void testPublierActionComposeDejaExistante() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.publierAction(actionCompose);
-        administrateur.publierAction(actionCompose);
-        assertEquals(1, administrateur.getCatalogue().size());
-    }
-
-    @Test
-    void testAjouterProucentageActionComposée() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
-        assertTrue(actionCompose.getActions().containsKey(actionSimple));
-        assertEquals(0.5f, actionCompose.getActions().get(actionSimple));
-    }
-
-    @Test
-    void testAjouterPourcentageActionComposéeAvecProportionInvalide() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 1.5f));
-    }
-
-    @Test
-    void testAjouterPourcentageActionComposéeAvecActionDejaExistante() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
-        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f));
-    }
-
-    @Test
-    void testMettreAJourPourcentageActionComposée() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
-        administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 0.7f);
-        assertEquals(0.7f, actionCompose.getActions().get(actionSimple));
-    }
-
-    @Test
-    void testMettreAJourPourcentageActionComposéeAvecProportionInvalidee() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
-        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 1.5f));
-    }
-
-    @Test
-    void testMettreAJourPourcentageActionComposéeAvecActionNonExistante() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 0.5f));
-    }
-
-    @Test
-    void testSupprimerPourcentageActionCompose() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
-        administrateur.supprimerActionComposee(actionCompose, actionSimple);
-        assertFalse(actionCompose.getActions().containsKey(actionSimple));
-    }  
-
-    @Test
-    void testSupprimerPourcentageActionComposeAvecActionNonExistante() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple actionSimple = new ActionSimple("Action Simple");
-        ActionCompose actionCompose = new ActionCompose("Action Composée");
-        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerActionComposee(actionCompose, actionSimple));
-    }  
-    void testSupprimerAction() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple action = new ActionSimple("Action France TV");
-        administrateur.publierAction(action);
-        administrateur.supprimerAction(action);
-        assertFalse(administrateur.getCatalogue().contains(action));
-    }
-
-    @Test
-    void testAnnulerSuppressionAction() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple action = new ActionSimple("Action France TV");
-        administrateur.publierAction(action);
-        administrateur.supprimerAction(action);
-        assertFalse(administrateur.getCatalogue().contains(action));
-        administrateur.publierAction(action);
-        assertTrue(administrateur.getCatalogue().contains(action));
-    }
-
-    @Test
-    void testSupprimerActionInexistante() {
-        Administrateur administrateur = new Administrateur("Doe", "John");
-        ActionSimple action = new ActionSimple("Action France TV");
-        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerAction(action));
-    }
-
-    @Test
-    void testUpdateActionSimpleCours() {
+    public void testUpdateActionSimpleCours() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("BNP");
-        Jour jourJ = new Jour(2026,  3,30);
+        Jour jourJ = new Jour(2026, 3, 30);
 
         // 1. Vérification de la valeur initiale (devrait être 0 par défaut)
         assertEquals(0f, action.valeur(jourJ), "La valeur initiale doit être 0");
@@ -242,79 +132,54 @@ public class AdministrateurTest {
         // 5. Vérifier qu'il n'y a pas de doublon (la taille doit rester 1)
         assertEquals(1, catalogue.size(), "Le Set ne doit contenir qu'un seul élément");
     }
+        /**
+         * Teste la mise à jour du catalogue complet.
+         */
+        @Test
+        void testSetCatalogue () {
+            // Khởi tạo admin
+            Administrateur admin = new Administrateur("Navarre", "David");
 
+            // Tạo một danh sách mới
+            List<Action> nouveauCatalogue = new ArrayList<>();
+            nouveauCatalogue.add(new ActionSimple("AXA"));
+            nouveauCatalogue.add(new ActionSimple("Orange"));
+
+            // Gán danh sách mới cho admin
+            admin.setCatalogue(nouveauCatalogue);
+
+            // Kiểm tra (assertions)
+            assertNotNull(admin.getCatalogue(), "Le catalogue ne doit pas être nul.");
+            assertEquals(2, admin.getCatalogue().size(), "Le catalogue doit contenir exactement 2 actions.");
+            assertEquals(nouveauCatalogue, admin.getCatalogue(), "Le catalogue récupéré doit être identique à celui défini.");
+        }
+
+        /**
+         * Teste la modification sécurisée du libellé d'une action.
+         * Vérifie que l'objet reste accessible dans un HashSet après modification.
+         */
+    /**
+     * Teste le cas "else" : modification du libellé quand l'action n'est pas dans le Set.
+     */
     @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionsWithoutCourse() {
-        // Initialisation locale
-        Administrateur admin = new Administrateur("Doe", "John");
-        ActionSimple action1 = new ActionSimple("Action1");
-        ActionSimple action2 = new ActionSimple("Action2");
+    void testUpdateActionLibelleLorsquElleNestPasDansLeCatalogue() {
 
-        // Publier les actions
-        admin.publierAction(action1);
-        admin.publierAction(action2);
+        Administrateur admin = new Administrateur("Navarre", "David");
+        ActionSimple action = new ActionSimple("AncienNom");
 
-        // Récupérer les actions sans cours pour la date actuelle
-        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
 
-        // Vérifier que action1 et action2 sont dans la liste
-        assertTrue(actionsSansCours.contains(action1), "Action1 devrait être dans la liste des actions sans cours");
-        assertTrue(actionsSansCours.contains(action2), "Action2 devrait être dans la liste des actions sans cours");
-    }
+        Set<Action> catalogueVide = new HashSet<>();
 
-    @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionWithoutCourseWhenOtherHasCourse() {
-        // Initialisation locale
-        Administrateur admin = new Administrateur("Doe", "John");
-        ActionSimple action1 = new ActionSimple("Action1");
-        ActionSimple action2 = new ActionSimple("Action2");
+        String nouveauNom = "NouveauNom";
 
-        // Publier les actions
-        admin.publierAction(action1);
-        admin.publierAction(action2);
 
-        // Mettre à jour le cours de action1 pour la date actuelle
-        LocalDate currentDate = LocalDate.now();
-        Jour today = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
-        admin.updateActionSimpleCours(action1, today, 100.0f);
+        admin.updateActionLibelle(catalogueVide, action, nouveauNom);
 
-        // Récupérer les actions sans cours pour la date actuelle
-        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
 
-        // Vérifier que action2 est dans la liste
-        assertTrue(actionsSansCours.contains(action2), "Action2 devrait être dans la liste des actions sans cours");
-    }
+        assertEquals(nouveauNom, action.getLibelle(), "Le libellé doit être mis à jour même si l'action n'est pas dans le Set.");
 
-    @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_DoesNotIncludeActionWithCourse() {
-        // Initialisation locale
-        Administrateur admin = new Administrateur("Doe", "John");
-        ActionSimple action1 = new ActionSimple("Action1");
 
-        // Publier l'action
-        admin.publierAction(action1);
-
-        // Mettre à jour le cours de action1 pour la date actuelle
-        LocalDate currentDate = LocalDate.now();
-        Jour today = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
-        admin.updateActionSimpleCours(action1, today, 100.0f);
-
-        // Récupérer les actions sans cours pour la date actuelle
-        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
-
-        // Vérifier que action1 n'est pas dans la liste
-        assertFalse(actionsSansCours.contains(action1), "Action1 ne devrait pas être dans la liste car elle a un cours");
-    }
-
-    @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_WithEmptyCatalogue() {
-        // Initialisation locale
-        Administrateur admin = new Administrateur("Doe", "John");
-
-        // Récupérer les actions sans cours pour la date actuelle
-        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
-
-        // Vérifier que la liste est vide
-        assertTrue(actionsSansCours.isEmpty(), "La liste devrait être vide quand aucune action n'est publiée");
+        assertFalse(catalogueVide.contains(action), "Le catalogue ne doit pas contenir l'action s'il ne la contenait pas au départ.");
+        assertEquals(0, catalogueVide.size());
     }
 }

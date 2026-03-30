@@ -76,6 +76,24 @@ class JourTest {
     }
 
     @Test
+    void testEqualsBranches() {
+        Jour jour = new Jour(2026, 3, 30);
+
+        // TEST BRANCHE A : Comparaison avec null
+        // Cela force (o == null) à être VRAI
+        assertNotEquals(null, jour, "Un objet Jour ne peut pas être égal à null");
+
+        // TEST BRANCHE B : Comparaison avec une autre classe
+        // Cela force (getClass() != o.getClass()) à être VRAI
+        assertNotEquals("Une simple chaîne de caractères", jour, "Un Jour n'est pas une String");
+
+        // TEST BRANCHE C : Comparaison avec la bonne classe (déjà fait normalement)
+        // Cela force les deux conditions à être FAUSSES pour continuer
+        Jour autreJour = new Jour(2026, 3, 30);
+        assertEquals(jour, autreJour);
+    }
+
+    @Test
     void testComparable() {
         final Jour jour1 = new Jour(2026, 1, 1);
         final Jour jour2 = new Jour(2026, 1, 2);
@@ -95,9 +113,63 @@ class JourTest {
     }
 
     /**
+     * Teste la récupération du numéro du jour dans l'année.
+     */
+    @Test
+    void testGetDayOfYear() {
+        // Cas 1 : Premier jour de l'année (1er janvier)
+        Jour premierJanvier = new Jour(2026, 1, 1);
+        /* Vérifie que le 1er janvier correspond au jour 1 */
+        assertEquals(1, premierJanvier.getDayOfYear(), "Le 1er janvier doit être le jour 1");
+
+        // Cas 2 : Un jour spécifique (30 mars 2026)
+        // Calcul : 31 (Jan) + 28 (Fév) + 30 (Mar) = 89
+        Jour jourCourant = new Jour(2026, 3, 30);
+        /* Vérifie le calcul cumulé des jours pour une date précise */
+        assertEquals(89, jourCourant.getDayOfYear(), "Le 30 mars 2026 doit être le jour 89");
+
+        // Cas 3 : Année bissextile (31 décembre 2024)
+        // 2024 là năm nhuận, nên ngày cuối cùng phải là 366
+        Jour finAnneeBissextile = new Jour(2024, 12, 31);
+        /* Vérifie que le calcul prend en compte le jour supplémentaire des années bissextiles */
+        assertEquals(366, finAnneeBissextile.getDayOfYear(), "Le 31 décembre 2024 (année bissextile) doit être le jour 366");
+    }
+
+    /**
      * Crée un objet Jour par défaut pour les tests.
      */
     private Jour getDefaultJour() {
         return new Jour(DEFAULT_YEAR, DEFAULT_MONTH, DEFAULT_DAY);
+    }
+
+    @Test
+    void testEqualsCompletPourCouverture() {
+        Jour jour = new Jour(2026, 3, 30);
+
+        // 1. Branche "this == o" -> VRAI
+        // Force la ligne 74 à retourner true immédiatement.
+        assertTrue(jour.equals(jour), "L'objet doit être égal à lui-même (réflexivité)");
+
+        // 2. Branche "this == o" -> FAUX
+        // Force le code à passer à la ligne 75.
+        Jour autreInstance = new Jour(2026, 3, 30);
+        // On utilise assertFalse pour être sûr qu'on ne compare pas les mêmes instances mémoire
+        assertNotSame(jour, autreInstance);
+
+        // 3. Branche "o == null" -> VRAI
+        // Force la ligne 75 à retourner false à cause du null.
+        assertNotEquals(null, jour, "Le test du null doit être couvert");
+
+        // 4. Branche "getClass() != o.getClass()" -> VRAI
+        // Force la ligne 75 à retourner false à cause du type différent (ex: String).
+        assertNotEquals("Une chaine", jour, "La comparaison avec une autre classe doit être couverte");
+
+        // 5. Branche "o == null || getClass() != o.getClass()" -> FAUX (les deux)
+        // Force le code à passer à la ligne 76 et 77 (le cast et la comparaison finale).
+        assertEquals(new Jour(2026, 3, 30), jour, "Deux jours identiques doivent passer les tests de structure");
+
+        // 6. Bonus : Test de la valeur finale -> FAUX
+        // Pour couvrir le cas où les dates sont différentes à la ligne 77.
+        assertNotEquals(new Jour(2025, 1, 1), jour, "Des dates différentes doivent retourner false");
     }
 }
