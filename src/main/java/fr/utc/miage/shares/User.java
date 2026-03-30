@@ -64,4 +64,16 @@ public class User {
     
     return result;
 }
+
+    public float valeurPortefeuille(Jour jour) {
+    float valeurTotale = 0;
+    
+    for (Map.Entry<Action, Integer> entry : this.portefeuille.getMapActions().entrySet()) {
+        Action action = entry.getKey();
+        int quantite = entry.getValue();
+        valeurTotale += action.valeur(jour) * quantite;
+    }
+    
+    return valeurTotale;
+}
 }
