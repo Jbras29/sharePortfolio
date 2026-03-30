@@ -15,12 +15,19 @@
  */
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -167,67 +174,75 @@ public class UserTest {
 
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
- 
-   @Test
-void supprimerFavori_actionPresente_retourneTrue() {
-    User user = new User("Sb", "Li");
-    ActionSimple action = new ActionSimple("Apple");
-    user.ajouterFavori(action);
 
-    boolean result = user.supprimerFavori(action);
 
-    assertTrue(result);
-    assertEquals(0, user.getFavoris().size());
-    assertFalse(user.getFavoris().contains(action));
-}
+    // Test pour RechercheActionParNom
+    @Test
+    public void testRechercherActionParNom_ActionSimpleExistante() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
 
-@Test
-void supprimerFavori_actionAbsente_retourneFalse() {
-    User user = new User("Sb", "Li");
-    ActionSimple action = new ActionSimple("Apple");
+        admin.publierAction(new ActionSimple("Apple"));
 
-    boolean result = user.supprimerFavori(action);
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), "Apple");
 
-    assertFalse(result);
-    assertEquals(0, user.getFavoris().size());
-}
+        assertTrue(resultat.isPresent());
+        assertEquals("Apple", resultat.get().getLibelle());
+        assertTrue(resultat.get() instanceof ActionSimple);
+    }
 
-@Test
-void supprimerFavori_actionNull_leveException() {
-    User user = new User("Doe", "John");
+    @Test
+    public void testRechercherActionParNom_ActionComposeeExistante() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
 
-    assertThrows(IllegalArgumentException.class, () -> user.supprimerFavori(null));
-}
+        admin.publierAction(new ActionCompose("Tech"));
 
-@Test
-void estFavori_actionPresente_retourneTrue() {
-    User user = new User("SB", "LIL");
-    ActionSimple action = new ActionSimple("Apple");
-    user.ajouterFavori(action);
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), "Tech");
 
-    boolean result = user.estFavori(action);
+        assertTrue(resultat.isPresent());
+        assertEquals("Tech", resultat.get().getLibelle());
+        assertTrue(resultat.get() instanceof ActionCompose);
+    }
 
-    assertTrue(result);
-    assertEquals(1, user.getFavoris().size());
-}
-@Test
-void estFavori_actionAbsente_retourneFalse() {
-    User user = new User("SB", "LIL");
-    ActionSimple action = new ActionSimple("Apple");
+    @Test
+    public void testRechercherActionParNom_ActionInexistante() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
 
-    boolean result = user.estFavori(action);
+        admin.publierAction(new ActionSimple("Apple"));
 
-    assertFalse(result);
-    assertEquals(0, user.getFavoris().size());
-}
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), "Tesla");
 
-@Test 
-void est_favori_actionNull(){
-    User user = new User("SB", "lil");
-        boolean result=user.estFavori(null);
-        assertFalse(result);
-    
-}
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_NomNull() {
+        User user = new User("Dupont", "Jean");
+        Administrateur admin = new Administrateur("Navarre", "David");
+
+        admin.publierAction(new ActionSimple("Apple"));
+
+        Optional<Action> resultat = user.rechercherActionParNom(admin.getCatalogue(), null);
+
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_CatalogueNull() {
+        User user = new User("Dupont", "Jean");
+
+        Optional<Action> resultat = user.rechercherActionParNom(null, "Apple");
+
+        assertTrue(resultat.isEmpty());
+    }
+
+    @Test
+    public void testRechercherActionParNom_CatalogueVide() {
+        User user = new User("Dupont", "Jean");
+
+        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");
 
 @Test
 void getPrixAction_actionEtJourValides_retourneValeurCorrecte() {

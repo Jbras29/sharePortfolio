@@ -16,19 +16,24 @@
 
 package fr.utc.miage.shares;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+
 
 public class Portefeuille {
     private final String nom;
     private String type;
     private Map<Action, Integer> mapActions;
+    private Map<Action, Float> mapActionsInitial;
 
     public Portefeuille(final String nom, final String type, Map<Action, Integer> mapActions) {
         this.nom = nom;
         this.type = type;
         this.mapActions = mapActions;
-
+        this.mapActionsInitial = new HashMap<>();
     }
 
     public String getNom() {
@@ -153,6 +158,10 @@ public class Portefeuille {
             throw new IllegalArgumentException("La quantité à acheter doit être strictement positive.");
         }
 
+        if (action == null) {
+            throw new IllegalArgumentException("L'action à acheter ne peut pas être nulle.");
+        }
+
         // Si le portefeuille contient déjà cette action, on met à jour la quantité
         if (this.mapActions.containsKey(action)) {
             int quantiteActuelle = this.mapActions.get(action);
@@ -160,6 +169,19 @@ public class Portefeuille {
         } else {
             // Sinon, on ajoute la nouvelle action avec sa quantité
             this.mapActions.put(action, quantite);
+        }
+
+        // Si le portefeuille contient déjà cette action, on met à jour la valeur initiale
+        if (this.mapActionsInitial.containsKey(action)) {
+            Jour aujourdHui = new Jour(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+            float valeur = action.valeur(aujourdHui) * quantite;
+            float valeurActuelle = this.mapActionsInitial.get(action);
+            this.mapActionsInitial.put(action, valeur + valeurActuelle);
+        } else {
+            // Sinon, on ajoute la nouvelle action avec sa valeur initiale
+            Jour aujourdHui = new Jour(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+            float valeur = action.valeur(aujourdHui);
+            this.mapActionsInitial.put(action, valeur * quantite);
         }
     }
 
@@ -184,7 +206,39 @@ public class Portefeuille {
             // Sinon, on met à jour la quantité restante
             this.mapActions.put(action, quantiteActuelle - quantite);
         }
+
+        float valeur = this.mapActionsInitial.get(action);
+        float valeurVente = action.valeur(new Jour(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth())) * quantite;
+        this.mapActionsInitial.put(action, valeur - valeurVente);
         return true;
     }
+
+    public List<Action> getActionsSortedByName() {
+        return this.mapActions.keySet().stream()
+                .sorted(Comparator.comparing(Action::getLibelle))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    public float calculerValeurTotale(Jour jour) {
+        /* Vérification de la validité du paramètre jour */
+        if (jour == null) {
+            throw new IllegalArgumentException("Le jour de valorisation ne peut pas être nul.");
+        }
+
+        float valeurTotale = 0f;
+
+        /* Parcours de toutes les actions détenues pour sommer leur valeur actuelle */
+        for (Map.Entry<Action, Integer> entry : this.mapActions.entrySet()) {
+            Action action = entry.getKey();
+            int quantite = entry.getValue();
+
+            /* Ajout de la valeur de l'action (cours * quantité) au total */
+            valeurTotale += action.valeur(jour) * quantite;
+        }
+
+        return valeurTotale;
+    }
+
+
 
 }

@@ -17,10 +17,12 @@
 package fr.utc.miage.shares;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 public class User {
 
     private String name;
@@ -92,6 +94,22 @@ public class User {
         throw new IllegalArgumentException("L'action ne peut pas être nulle.");
     }
     return this.favoris.add(action); 
+    }
+
+
+    // Trouver une action par son nom
+    public Optional<Action> rechercherActionParNom(List<Action> catalogue, String libelle) {
+    if (catalogue == null || libelle == null) {
+        return Optional.empty();
+    }
+
+    for (Action action : catalogue) {
+        if (action != null && action.getLibelle() != null && action.getLibelle().equals(libelle)) {
+            return Optional.of(action);
+        }
+    }
+
+    return Optional.empty();
 }
     public boolean supprimerFavori(Action action) {
     if (action == null) {
