@@ -16,6 +16,7 @@
 
 package fr.utc.miage.shares;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +24,13 @@ public class Portefeuille {
     private final String nom;
     private String type;
     private Map<Action, Integer> mapActions;
+    private Map<Action, Float> mapActionsInitial;
 
     public Portefeuille(final String nom, final String type, Map<Action, Integer> mapActions) {
         this.nom = nom;
         this.type = type;
         this.mapActions = mapActions;
-
+        this.mapActionsInitial = new HashMap<>();
     }
 
     public String getNom() {
@@ -153,6 +155,10 @@ public class Portefeuille {
             throw new IllegalArgumentException("La quantité à acheter doit être strictement positive.");
         }
 
+        if (action == null) {
+            throw new IllegalArgumentException("L'action à acheter ne peut pas être nulle.");
+        }
+
         // Si le portefeuille contient déjà cette action, on met à jour la quantité
         if (this.mapActions.containsKey(action)) {
             int quantiteActuelle = this.mapActions.get(action);
@@ -160,6 +166,19 @@ public class Portefeuille {
         } else {
             // Sinon, on ajoute la nouvelle action avec sa quantité
             this.mapActions.put(action, quantite);
+        }
+
+        // Si le portefeuille contient déjà cette action, on met à jour la valeur initiale
+        if (this.mapActionsInitial.containsKey(action)) {
+            Jour aujourdHui = new Jour(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+            float valeur = action.valeur(aujourdHui) * quantite;
+            float valeurActuelle = this.mapActionsInitial.get(action);
+            this.mapActionsInitial.put(action, valeur + valeurActuelle);
+        } else {
+            // Sinon, on ajoute la nouvelle action avec sa valeur initiale
+            Jour aujourdHui = new Jour(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+            float valeur = action.valeur(aujourdHui);
+            this.mapActionsInitial.put(action, valeur * quantite);
         }
     }
 
@@ -184,7 +203,79 @@ public class Portefeuille {
             // Sinon, on met à jour la quantité restante
             this.mapActions.put(action, quantiteActuelle - quantite);
         }
+
+        float valeur = this.mapActionsInitial.get(action);
+        float valeurVente = action.valeur(new Jour(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth())) * quantite;
+        this.mapActionsInitial.put(action, valeur - valeurVente);
         return true;
+    }
+
+    public Map<Action, Float> getMapActionsInitial() {
+        return mapActionsInitial;
+    }
+
+    public void setMapActionsInitial(Map<Action, Float> mapActionsInitial) {
+        this.mapActionsInitial = mapActionsInitial;
+    }
+
+    /**
+     * Calcule le gain/perte en cours pour une action donnée.
+     *
+     * @param action L'action concernée
+     * @param jour Le jour de valorisation
+     * @return le gain en dollars (peut être négatif)
+     */
+    public float calculerGainEnCours(Action action, Jour jour) {
+        if (action == null) {
+            throw new IllegalArgumentException("L'action ne peut pas être nulle.");
+        }
+        if (jour == null) {
+            throw new IllegalArgumentException("Le jour ne peut pas être nul.");
+        }
+        if (!this.mapActions.containsKey(action)) {
+            throw new IllegalArgumentException("L'action n'existe pas dans le portefeuille.");
+        }
+
+        int quantite = this.mapActions.get(action);
+        float valeurActuelle = action.valeur(jour) * quantite;
+        float valeurInitiale = this.mapActionsInitial.getOrDefault(action, 0f);
+        return valeurActuelle - valeurInitiale;
+    }
+
+    /**
+     * Calcule le gain/perte total(e) en cours du portefeuille.
+     *
+     * @param jour Le jour de valorisation
+     * @return le gain total en dollars (peut être négatif)
+     */
+    public float calculerGainTotalEnCours(Jour jour) {
+        if (jour == null) {
+            throw new IllegalArgumentException("Le jour ne peut pas être nul.");
+        }
+
+        float gainTotal = 0f;
+        for (Action action : this.mapActions.keySet()) {
+            gainTotal += calculerGainEnCours(action, jour);
+        }
+        return gainTotal;
+    }
+
+    /**
+     * Calcule le gain/perte en cours pour chaque action du portefeuille.
+     *
+     * @param jour Le jour de valorisation
+     * @return une map Action -> gain en dollars
+     */
+    public Map<Action, Float> calculerGainEnCoursParAction(Jour jour) {
+        if (jour == null) {
+            throw new IllegalArgumentException("Le jour ne peut pas être nul.");
+        }
+
+        Map<Action, Float> gainsParAction = new HashMap<>();
+        for (Action action : this.mapActions.keySet()) {
+            gainsParAction.put(action, calculerGainEnCours(action, jour));
+        }
+        return gainsParAction;
     }
 
 }
