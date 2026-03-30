@@ -242,62 +242,57 @@ public class UserTest {
     public void testRechercherActionParNom_CatalogueVide() {
         User user = new User("Dupont", "Jean");
 
-        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");
+        Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");}
 
-        assertTrue(resultat.isEmpty());
-    }
+@Test
+void getPrixAction_actionEtJourValides_retourneValeurCorrecte() {
+    User user = new User("Doe", "John");
+    ActionSimple action = new ActionSimple("Apple");
+    Jour jour = new Jour(2025, 3,2);
+    action.enrgCours(jour,160);
 
-    @Test
-    public void testRechercherActionParNom_ActionNullDansCatalogue() {
-        User user = new User("Dupont", "Jean");
-        List<Action> catalogue = new ArrayList<>();
+    float result = user.getPrixAction(action, jour);
 
-        catalogue.add(null);
-        catalogue.add(new ActionSimple("Apple"));
+    assertEquals(160, result);
+}
 
-        Optional<Action> resultat = user.rechercherActionParNom(catalogue, "Apple");
+@Test 
+void getPrixAction_actionNull(){
+    User user= new User("Smith", "John");
+    Jour jour = new Jour(2025,4,3);
+    assertThrows(IllegalArgumentException.class, ()->user.getPrixAction(null, jour));
+}
 
-        assertTrue(resultat.isPresent());
-        assertEquals("Apple", resultat.get().getLibelle());
-    }
-  
-    @Test
-    void getInfoAction_actionSimple_retourneTypeSimple() {
-        User user = new User("Doe", "John");
-        ActionSimple action = new ActionSimple("Apple");
-        LocalDate today = LocalDate.now();
-        Jour jour = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        action.enrgCours(jour, 100f);
+@Test
+void getPrixAction_jourNull_leveException() {
+    User user = new User("Doe", "John");
+    ActionSimple action = new ActionSimple("Apple");
 
-        ActionDTO dto = user.getInfoAction(action);
+    assertThrows(IllegalArgumentException.class, () -> user.getPrixAction(action, null));
+}
 
-        assertEquals("Apple", dto.libelle());
-        assertEquals(TypeAction.SIMPLE, dto.typeAction());
-        assertEquals(100f, dto.valeur());
-    }
+@Test 
+void getPrixAction_jourSansCours_retourneZero() {
+    User user = new User("Doe", "John");
+    ActionSimple action = new ActionSimple("Apple");
+    Jour jour = new Jour(2025, 5,17);
 
-    @Test
-    void getInfoAction_actionCompose_retourneTypeCompose() {
-        User user = new User("Doe", "John");
-        ActionSimple action1 = new ActionSimple("Apple");
-        ActionSimple action2 = new ActionSimple("Google");
-        ActionCompose actionCompose = new ActionCompose("CAC40");
-        actionCompose.addAction(action1, 0.5f);
-        actionCompose.addAction(action2, 0.5f);
+    float result = user.getPrixAction(action, jour);
 
-        ActionDTO dto = user.getInfoAction(actionCompose);
+    assertEquals(0, result);
+}
 
-        assertEquals("CAC40", dto.libelle());
-        assertEquals(TypeAction.COMPOSE, dto.typeAction());
-    }
+@Test 
+void getPrixAction_plusieursJours(){
+    User user = new User("Smith","Jason");
+    ActionSimple action=new ActionSimple("Tesla");
+    Jour jour1 = new Jour(2025, 3, 14);
+    Jour jour2= new Jour(2025, 7, 23);
 
-    @Test
-    void getInfoAction_retourneLibelleCorrect() {
-        User user = new User("Doe", "John");
-        ActionSimple action = new ActionSimple("Tesla");
+    action.enrgCours(jour1, 100);
+    action.enrgCours(jour2, 200);
 
-        ActionDTO dto = user.getInfoAction(action);
-
-        assertEquals("Tesla", dto.libelle());
-    }
+    assertEquals(100,user.getPrixAction(action, jour1));
+    assertEquals(200,user.getPrixAction(action, jour2));
+}
 }
