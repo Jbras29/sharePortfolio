@@ -45,4 +45,12 @@ public class Administrateur extends User {
     public void setCatalogue(List<Action> catalogue) {
         this.catalogue = catalogue;
     }
+
+    public void ajouterPourcentageActionComposée (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
+        if (actionCompose.addAction(actionSimple, pourcentage)) {
+            System.out.println("Action '" + actionSimple.getLibelle() + "' ajoutée à l'action composée '" + actionCompose.getLibelle() + "' avec un pourcentage de " + pourcentage);
+        } else {
+            System.out.println("Impossible d'ajouter l'action '" + actionSimple.getLibelle() + "' à l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez le pourcentage ou si l'action est déjà présente.");
+        }
+    }
 }
