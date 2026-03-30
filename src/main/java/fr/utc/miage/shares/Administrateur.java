@@ -44,6 +44,8 @@ public class Administrateur extends User {
             System.out.println("Action '" + action.getLibelle() + "' supprimée avec succès.");
         } else {
             throw new IllegalArgumentException("Impossible de supprimer l'action '" + action.getLibelle() + "' : elle n'existe pas dans le catalogue.");
+        }
+    }
 
     public void updateActionSimpleCours(ActionSimple as, Jour j, float v) {
         // Logique pour mettre à jour la valeur dans l'objet ActionSimple

@@ -111,7 +111,10 @@ public class AdministrateurTest {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("Action France TV");
         assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerAction(action));
-    public void testUpdateActionSimpleCours() {
+    }
+
+    @Test
+    void testUpdateActionSimpleCours() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("BNP");
