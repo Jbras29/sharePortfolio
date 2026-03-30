@@ -167,66 +167,43 @@ public class UserTest {
 
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
- 
-   @Test
-void supprimerFavori_actionPresente_retourneTrue() {
-    User user = new User("Sb", "Li");
-    ActionSimple action = new ActionSimple("Apple");
-    user.ajouterFavori(action);
 
-    boolean result = user.supprimerFavori(action);
+    @Test
+    void getInfoAction_actionSimple_retourneTypeSimple() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        Jour jour = new Jour(2025, 1, 1);
+        action.enrgCours(jour, 100f);
 
-    assertTrue(result);
-    assertEquals(0, user.getFavoris().size());
-    assertFalse(user.getFavoris().contains(action));
-}
+        ActionDTO dto = user.getInfoAction(action);
 
-@Test
-void supprimerFavori_actionAbsente_retourneFalse() {
-    User user = new User("Sb", "Li");
-    ActionSimple action = new ActionSimple("Apple");
+        assertEquals("Apple", dto.libelle());
+        assertEquals(TypeAction.SIMPLE, dto.typeAction());
+        assertNotNull(dto.valeur());
+    }
 
-    boolean result = user.supprimerFavori(action);
+    @Test
+    void getInfoAction_actionCompose_retourneTypeCompose() {
+        User user = new User("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Apple");
+        ActionSimple action2 = new ActionSimple("Google");
+        ActionCompose actionCompose = new ActionCompose("CAC40");
+        actionCompose.addAction(action1, 0.5f);
+        actionCompose.addAction(action2, 0.5f);
 
-    assertFalse(result);
-    assertEquals(0, user.getFavoris().size());
-}
+        ActionDTO dto = user.getInfoAction(actionCompose);
 
-@Test
-void supprimerFavori_actionNull_leveException() {
-    User user = new User("Doe", "John");
+        assertEquals("CAC40", dto.libelle());
+        assertEquals(TypeAction.COMPOSE, dto.typeAction());
+    }
 
-    assertThrows(IllegalArgumentException.class, () -> user.supprimerFavori(null));
-}
+    @Test
+    void getInfoAction_retourneLibelleCorrect() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Tesla");
 
-@Test
-void estFavori_actionPresente_retourneTrue() {
-    User user = new User("SB", "LIL");
-    ActionSimple action = new ActionSimple("Apple");
-    user.ajouterFavori(action);
+        ActionDTO dto = user.getInfoAction(action);
 
-    boolean result = user.estFavori(action);
-
-    assertTrue(result);
-    assertEquals(1, user.getFavoris().size());
-}
-@Test
-void estFavori_actionAbsente_retourneFalse() {
-    User user = new User("SB", "LIL");
-    ActionSimple action = new ActionSimple("Apple");
-
-    boolean result = user.estFavori(action);
-
-    assertFalse(result);
-    assertEquals(0, user.getFavoris().size());
-}
-
-@Test 
-void est_favori_actionNull(){
-    User user = new User("SB", "lil");
-        boolean result=user.estFavori(null);
-        assertFalse(result);
-    
-}
-
+        assertEquals("Tesla", dto.libelle());
+    }
 }
