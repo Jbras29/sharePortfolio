@@ -169,7 +169,7 @@ public class UserTest {
     // Test ComparaisonPortefeuille
 
     @Test
-    public void testComparerValeurPortefeuille_Augmentation() {
+    void testComparerValeurPortefeuille_Augmentation() {
         User user = new User("Dupont", "Jean");
 
         ActionSimple apple = new ActionSimple("Apple");
@@ -187,7 +187,7 @@ public class UserTest {
     }
 
     @Test
-    public void testComparerValeurPortefeuille_DateDebutNull() {
+    void testComparerValeurPortefeuille_DateDebutNull() {
         User user = new User("Dupont", "Jean");
         Jour dateFin = new Jour(2025, 1, 2);
 
@@ -197,7 +197,7 @@ public class UserTest {
     }
 
     @Test
-    public void testComparerValeurPortefeuille_DateFinNull() {
+    void testComparerValeurPortefeuille_DateFinNull() {
         User user = new User("Dupont", "Jean");
         Jour dateDebut = new Jour(2025, 1, 1);
 
