@@ -17,6 +17,7 @@
 package fr.utc.miage.shares;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 public class User {
@@ -28,7 +29,7 @@ public class User {
     public User(String name, String firstName) {
         this.name = name;
         this.firstName = firstName;
-        this.portefeuille = new Portefeuille(name + " " + firstName, "Standard", Map.of());
+        this.portefeuille = new Portefeuille(name + " " + firstName, "Standard", new HashMap<>());
     }
 
     public String getName() {
@@ -54,11 +55,20 @@ public class User {
     public void setPortefeuille(Portefeuille portefeuille) {
         this.portefeuille = portefeuille;
     }
-    
+
+    public Map<Action, Integer> quantitePossede() {
+        Map<Action, Integer> result = new HashMap<>();
+
+        if (portefeuille != null) {
+            result.putAll(portefeuille.getMapActions());
+        }
+
+        return result;
+    }
+  
     public ActionDTO getInfoAction(Action action) {
         LocalDate today = LocalDate.now();
         Jour jourActuel = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
         return new ActionDTO(action.getLibelle(), action.getTypeAction(), action.valeur(jourActuel));
     } 
-    
 }
