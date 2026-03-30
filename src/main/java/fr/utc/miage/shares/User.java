@@ -56,10 +56,9 @@ public class User {
     }
     
     public ActionDTO getInfoAction(Action action) {
-    LocalDate today = LocalDate.now();
-    Jour jourActuel = new Jour(today.getYear(), today.getDayOfYear());
-    return new ActionDTO(action.getLibelle(), action.getTypeAction(), action.valeur(jourActuel));
-}
-    
+        LocalDate today = LocalDate.now();
+        Jour jourActuel = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+        return new ActionDTO(action.getLibelle(), action.getTypeAction(), action.valeur(jourActuel));
+    } 
     
 }
