@@ -70,7 +70,6 @@ public class ActionSimple extends Action {
         return this.mapCours.getOrDefault(j, DEFAULT_ACTION_VALUE);
     }
 
-<<<<<<< Updated upstream
     public Map<Jour, Float> getHistoriqueCours(Jour dateDebut, Jour dateFin) {
         /* Utilisation d'un TreeMap pour garantir que les dates sont dans l'ordre chronologique */
         Map<Jour, Float> historique = new TreeMap<>();
@@ -100,7 +99,6 @@ public class ActionSimple extends Action {
             System.out.printf("%10s | %8.2f€ | %s%n", jour.toString(), valeur, barre);
         });
     }
-=======
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -129,5 +127,4 @@ public class ActionSimple extends Action {
     }
 
     
->>>>>>> Stashed changes
 }
