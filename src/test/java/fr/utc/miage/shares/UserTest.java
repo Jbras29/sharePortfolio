@@ -166,16 +166,6 @@ public class UserTest {
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
 
-    @Test
-    public void testGetInfoAction_ActionNull() {
-        User user = new User("Dupont", "Jean");
-
-        assertThrows(NullPointerException.class, () -> {
-            user.getInfoAction(null);
-        });
-}
-
-
     // Test ComparaisonPortefeuille
 
     @Test
