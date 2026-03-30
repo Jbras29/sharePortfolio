@@ -140,6 +140,14 @@ public class AdministrateurTest {
     }
 
     @Test
+    void testMettreAJourPourcentageActionComposéeAvecActionNonExistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 0.5f));
+    }
+
+    @Test
     void testSupprimerPourcentageActionCompose() {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple actionSimple = new ActionSimple("Action Simple");
