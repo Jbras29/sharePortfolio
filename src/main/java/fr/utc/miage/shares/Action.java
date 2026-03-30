@@ -16,6 +16,7 @@
 package fr.utc.miage.shares;
 
 import java.util.Objects;
+import fr.utc.miage.shares.TypeAction;
 
 /**
  * This class embeds thecommon behavior of any Action object.
@@ -25,6 +26,8 @@ import java.util.Objects;
 public abstract class Action {
 
     private final String libelle;
+
+    protected TypeAction typeAction;
 
     /**
      * Get the value of libelle
@@ -74,5 +77,9 @@ public abstract class Action {
     @Override
     public String toString() {
         return this.getLibelle();
+    }
+
+    public TypeAction getTypeAction() {
+        return typeAction;
     }
 }
