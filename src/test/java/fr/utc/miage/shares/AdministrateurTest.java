@@ -17,6 +17,7 @@
 
 package fr.utc.miage.shares;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -87,6 +88,85 @@ public class AdministrateurTest {
     }
 
     @Test
+    void testPublierActionComposeDejaExistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        administrateur.publierAction(actionCompose);
+        administrateur.publierAction(actionCompose);
+        assertEquals(1, administrateur.getCatalogue().size());
+    }
+
+    @Test
+    void testAjouterProucentageActionComposée() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        assertTrue(actionCompose.getActions().containsKey(actionSimple));
+        assertEquals(0.5f, actionCompose.getActions().get(actionSimple));
+    }
+
+    @Test
+    void testAjouterPourcentageActionComposéeAvecProportionInvalide() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 1.5f));
+    }
+
+    @Test
+    void testAjouterPourcentageActionComposéeAvecActionDejaExistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        assertThrows(IllegalArgumentException.class, () -> administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f));
+    }
+
+    @Test
+    void testMettreAJourPourcentageActionComposée() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 0.7f);
+        assertEquals(0.7f, actionCompose.getActions().get(actionSimple));
+    }
+
+    @Test
+    void testMettreAJourPourcentageActionComposéeAvecProportionInvalidee() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 1.5f));
+    }
+
+    @Test
+    void testMettreAJourPourcentageActionComposéeAvecActionNonExistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.updatePourcentageActionComposee(actionCompose, actionSimple, 0.5f));
+    }
+
+    @Test
+    void testSupprimerPourcentageActionCompose() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        administrateur.ajouterPourcentageActionComposee(actionCompose, actionSimple, 0.5f);
+        administrateur.supprimerActionComposee(actionCompose, actionSimple);
+        assertFalse(actionCompose.getActions().containsKey(actionSimple));
+    }  
+
+    @Test
+    void testSupprimerPourcentageActionComposeAvecActionNonExistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple actionSimple = new ActionSimple("Action Simple");
+        ActionCompose actionCompose = new ActionCompose("Action Composée");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerActionComposee(actionCompose, actionSimple));
+    }  
     void testSupprimerAction() {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("Action France TV");

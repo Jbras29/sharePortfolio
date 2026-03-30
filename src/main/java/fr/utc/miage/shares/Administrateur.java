@@ -76,4 +76,31 @@ public class Administrateur extends User {
     public void setCatalogue(List<Action> catalogue) {
         this.catalogue = catalogue;
     }
+
+    public void ajouterPourcentageActionComposee (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
+        if (actionCompose.addAction(actionSimple, pourcentage)) {
+            System.out.println("Action '" + actionSimple.getLibelle() + "' ajoutée à l'action composée '" + actionCompose.getLibelle() + "' avec un pourcentage de " + pourcentage);
+        } else {
+            System.out.println("Impossible d'ajouter l'action '" + actionSimple.getLibelle() + "' à l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez le pourcentage ou si l'action est déjà présente.");
+            throw new IllegalArgumentException("Proportion must be between 0 and 1 and action must be valid and not already exist in the composition.");
+        }
+    }
+
+    public void updatePourcentageActionComposee (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
+        if (actionCompose.updateProportion(actionSimple, pourcentage)) {
+            System.out.println("Pourcentage de l'action '" + actionSimple.getLibelle() + "' dans l'action composée '" + actionCompose.getLibelle() + "' mis à jour à " + pourcentage);
+        } else {
+            System.out.println("Impossible de mettre à jour le pourcentage de l'action '" + actionSimple.getLibelle() + "' dans l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez le pourcentage ou si l'action est déjà présente.");
+            throw new IllegalArgumentException("Proportion must be between 0 and 1 and action must be valid and already exist in the composition.");
+        }
+    }
+
+    public void supprimerActionComposee (ActionCompose actionCompose, ActionSimple actionSimple) {
+        if (actionCompose.removeAction(actionSimple)) {
+            System.out.println("Action '" + actionSimple.getLibelle() + "' supprimée de l'action composée '" + actionCompose.getLibelle() + "'.");
+        } else {
+            System.out.println("Impossible de supprimer l'action '" + actionSimple.getLibelle() + "' de l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez si l'action est présente dans la composition.");
+            throw new IllegalArgumentException("Action must be valid and already exist in the composition.");
+        }
+    }
 }
