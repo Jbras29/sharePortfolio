@@ -16,6 +16,7 @@
 
 package fr.utc.miage.shares;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Portefeuille {
@@ -30,38 +31,38 @@ public class Portefeuille {
 
     }
 
-        public String getNom() {
-            return nom;
-        }
+    public String getNom() {
+        return nom;
+    }
 
-        public String getType() {
-            return type;
-        }
+    public String getType() {
+        return type;
+    }
 
-        public Map<Action, Integer> getMapActions() {
-            return mapActions;
-        }
+    public Map<Action, Integer> getMapActions() {
+        return mapActions;
+    }
 
-        public void setType(String type) {
-            this.type=type;
-        }
+    public void setType(String type) {
+        this.type=type;
+    }
 
-        public void setMapActions(Map<Action, Integer> mapActions) {
-            this.mapActions=mapActions;
-        }
+    public void setMapActions(Map<Action, Integer> mapActions) {
+        this.mapActions=mapActions;
+    }
 
-        public String afficher(){
-            if (mapActions.isEmpty()){
-                return "Le portefeuille" +nom+ "est vide";
-            }
-            return "Le portefeuille " + nom + "contient des actions";
+    public String afficher(){
+        if (mapActions.isEmpty()){
+            return "Le portefeuille" +nom+ "est vide";
         }
+        return "Le portefeuille " + nom + "contient des actions";
+    }
 
-        public boolean contientAction (Action action){
-            return mapActions.containsKey(action);
-        }
+    public boolean contientAction (Action action){
+        return mapActions.containsKey(action);
+    }
 
-            /**
+    /**
      * Méthode pour afficher le détail des actions détenues dans le portefeuille.
      * * @param jour Le jour pour lequel on souhaite consulter les valeurs.
      */
@@ -100,6 +101,42 @@ public class Portefeuille {
         System.out.println("-------------------------------------------------------------------------");
         System.out.printf("%-51s | %-15.2f%n", "VALEUR TOTALE DU PORTEFEUILLE", valeurTotalePortefeuille);
         System.out.println("=========================================================================\n");
+    }
+
+    /**
+     * Calcule le pourcentage de valeur pour chaque action du portefeuille.
+     * 
+     * @param jour Le jour pour lequel on souhaite consulter les valeurs
+     * @return Une map contenant chaque action et son pourcentage dans la valeur totale du portefeuille
+     */
+    public Map<Action, Double> afficherPourcentagePortefeuille(Jour jour) {
+        Map<Action, Double> pourcentages = new HashMap<>();
+        
+        // Calcul de la valeur totale du portefeuille
+        float valeurTotale = 0f;
+        for (Map.Entry<Action, Integer> entry : this.mapActions.entrySet()) {
+            Action action = entry.getKey();
+            int quantite = entry.getValue();
+            float valeurUnitaire = action.valeur(jour);
+            valeurTotale += quantite * valeurUnitaire;
+        }
+        
+        // Si la valeur totale est 0, retourner une map vide
+        if (valeurTotale == 0) {
+            return pourcentages;
+        }
+        
+        // Calcul du pourcentage pour chaque action
+        for (Map.Entry<Action, Integer> entry : this.mapActions.entrySet()) {
+            Action action = entry.getKey();
+            int quantite = entry.getValue();
+            float valeurUnitaire = action.valeur(jour);
+            float valeurGlobale = quantite * valeurUnitaire;
+            double pourcentage = (valeurGlobale / valeurTotale) * 100;
+            pourcentages.put(action, pourcentage);
+        }
+        
+        return pourcentages;
     }
 
     /**
