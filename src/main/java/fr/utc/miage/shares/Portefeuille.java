@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 
 public class Portefeuille {
+    private static final Logger LOGGER = Logger.getLogger(Portefeuille.class.getName());
     private final String nom;
     private String type;
     private Map<Action, Integer> mapActions;
@@ -73,10 +75,11 @@ public class Portefeuille {
      */
     public void afficherDetailsPortefeuille(Jour jour) {
         // Affichage de l'en-tête du tableau
-        System.out.println("=== Portefeuille : " + this.nom + " (" + this.type + ") ===");
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("%-20s | %-10s | %-15s | %-15s%n", "Libellé", "Quantité", "Valeur Unitaire", "Valeur Globale");
-        System.out.println("-------------------------------------------------------------------------");
+        LOGGER.info("=== Portefeuille : " + this.nom + " (" + this.type + ") ===");
+        final String separator = "-------------------------------------------------------------------------";
+        LOGGER.info(separator);
+        LOGGER.info(String.format("%-20s | %-10s | %-15s | %-15s", "Libellé", "Quantité", "Valeur Unitaire", "Valeur Globale"));
+        LOGGER.info(separator);
 
         float valeurTotalePortefeuille = 0f;
 
@@ -98,14 +101,14 @@ public class Portefeuille {
             valeurTotalePortefeuille += valeurGlobale;
 
             // Affichage formaté de la ligne pour l'action courante
-            System.out.printf("%-20s | %-10d | %-15.2f | %-15.2f%n",
-                    libelle, quantite, valeurUnitaire, valeurGlobale);
+            LOGGER.info(String.format("%-20s | %-10d | %-15.2f | %-15.2f",
+                    libelle, quantite, valeurUnitaire, valeurGlobale));
         }
 
         // Affichage du pied de page avec la valeur totale du portefeuille
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("%-51s | %-15.2f%n", "VALEUR TOTALE DU PORTEFEUILLE", valeurTotalePortefeuille);
-        System.out.println("=========================================================================\n");
+        LOGGER.info(separator);
+        LOGGER.info(String.format("%-51s | %-15.2f", "VALEUR TOTALE DU PORTEFEUILLE", valeurTotalePortefeuille));
+        LOGGER.info("=========================================================================");
     }
 
     /**

@@ -50,7 +50,6 @@ public class ActionSimple extends Action {
      * @param v la nouvelle valeur du cours
      */
     public void enregistrerCours(final Jour j, final float v) {
-        // Suppression de la condition 'if (!containsKey)' pour permettre la modification
         if (v < 0) {
             throw new IllegalArgumentException("Le cours ne peut pas être négatif.");
         }
@@ -71,6 +70,7 @@ public class ActionSimple extends Action {
         return this.mapCours.getOrDefault(j, DEFAULT_ACTION_VALUE);
     }
 
+<<<<<<< Updated upstream
     public Map<Jour, Float> getHistoriqueCours(Jour dateDebut, Jour dateFin) {
         /* Utilisation d'un TreeMap pour garantir que les dates sont dans l'ordre chronologique */
         Map<Jour, Float> historique = new TreeMap<>();
@@ -100,4 +100,34 @@ public class ActionSimple extends Action {
             System.out.printf("%10s | %8.2f€ | %s%n", jour.toString(), valeur, barre);
         });
     }
+=======
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((mapCours == null) ? 0 : mapCours.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ActionSimple other = (ActionSimple) obj;
+        if (mapCours == null) {
+            if (other.mapCours != null)
+                return false;
+        } else if (!mapCours.equals(other.mapCours))
+            return false;
+        return true;
+    }
+
+    
+>>>>>>> Stashed changes
 }

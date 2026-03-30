@@ -17,7 +17,6 @@ package fr.utc.miage.shares;
 
 import java.util.Objects;
 import java.util.logging.Logger;
-import fr.utc.miage.shares.TypeAction;
 
 /**
  * Cette classe définit le comportement commun de tout objet Action.

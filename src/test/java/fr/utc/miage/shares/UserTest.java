@@ -17,23 +17,17 @@ package fr.utc.miage.shares;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+class UserTest {
 
     @Test
     void testGetFirstName() {
@@ -178,7 +172,7 @@ public class UserTest {
 
     // Test pour RechercheActionParNom
     @Test
-    public void testRechercherActionParNom_ActionSimpleExistante() {
+    void testRechercherActionParNom_ActionSimpleExistante() {
         User user = new User("Dupont", "Jean");
         Administrateur admin = new Administrateur("Navarre", "David");
 
@@ -192,7 +186,7 @@ public class UserTest {
     }
 
     @Test
-    public void testRechercherActionParNom_ActionComposeeExistante() {
+    void testRechercherActionParNom_ActionComposeeExistante() {
         User user = new User("Dupont", "Jean");
         Administrateur admin = new Administrateur("Navarre", "David");
 
@@ -206,7 +200,7 @@ public class UserTest {
     }
 
     @Test
-    public void testRechercherActionParNom_ActionInexistante() {
+    void testRechercherActionParNom_ActionInexistante() {
         User user = new User("Dupont", "Jean");
         Administrateur admin = new Administrateur("Navarre", "David");
 
@@ -218,7 +212,7 @@ public class UserTest {
     }
 
     @Test
-    public void testRechercherActionParNom_NomNull() {
+    void testRechercherActionParNom_NomNull() {
         User user = new User("Dupont", "Jean");
         Administrateur admin = new Administrateur("Navarre", "David");
 
@@ -230,7 +224,7 @@ public class UserTest {
     }
 
     @Test
-    public void testRechercherActionParNom_CatalogueNull() {
+    void testRechercherActionParNom_CatalogueNull() {
         User user = new User("Dupont", "Jean");
 
         Optional<Action> resultat = user.rechercherActionParNom(null, "Apple");
@@ -239,7 +233,7 @@ public class UserTest {
     }
 
     @Test
-    public void testRechercherActionParNom_CatalogueVide() {
+    void testRechercherActionParNom_CatalogueVide() {
         User user = new User("Dupont", "Jean");
 
         Optional<Action> resultat = user.rechercherActionParNom(new ArrayList<>(), "Apple");

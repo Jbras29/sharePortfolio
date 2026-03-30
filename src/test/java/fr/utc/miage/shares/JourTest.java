@@ -148,7 +148,7 @@ class JourTest {
 
         // 1. Branche "this == o" -> VRAI
         // Force la ligne 74 à retourner true immédiatement.
-        assertTrue(jour.equals(jour), "L'objet doit être égal à lui-même (réflexivité)");
+        assertEquals(jour, jour, "L'objet doit être égal à lui-même (réflexivité)");
 
         // 2. Branche "this == o" -> FAUX
         // Force le code à passer à la ligne 75.

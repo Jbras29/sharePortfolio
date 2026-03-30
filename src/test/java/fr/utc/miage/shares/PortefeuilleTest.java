@@ -17,12 +17,14 @@ package fr.utc.miage.shares;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -172,25 +174,46 @@ class PortefeuilleTest {
 
     @Test
     void testAfficherDetailsPortefeuille() {
-        // Capture de la sortie console
-        PrintStream originalOut = System.out;
-        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStreamCaptor));
+        Logger logger = Logger.getLogger(Portefeuille.class.getName());
+        StringBuilder logsCaptor = new StringBuilder();
+        Handler testHandler = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                logsCaptor.append(record.getMessage()).append("\n");
+            }
+
+            @Override
+            public void flush() {
+                // No-op for in-memory capture
+            }
+
+            @Override
+            public void close() {
+                // No-op for in-memory capture
+            }
+        };
+
+        boolean originalUseParentHandlers = logger.getUseParentHandlers();
+        Level originalLevel = logger.getLevel();
+        logger.setUseParentHandlers(false);
+        logger.setLevel(Level.INFO);
+        logger.addHandler(testHandler);
 
         try {
             portefeuille.acheterAction(actionApple, 10);
             Jour aujourdHui = new Jour(2024, 1,10);
             portefeuille.afficherDetailsPortefeuille(aujourdHui);
 
-            String sortieConsole = outputStreamCaptor.toString();
+            String sortieLogs = logsCaptor.toString();
 
-            assertTrue(sortieConsole.contains("Mon Portefeuille Test"));
-            assertTrue(sortieConsole.contains("Apple"));
-            assertTrue(sortieConsole.contains("10"));
-            assertTrue(sortieConsole.contains("VALEUR TOTALE"));
+            assertTrue(sortieLogs.contains("Mon Portefeuille Test"));
+            assertTrue(sortieLogs.contains("Apple"));
+            assertTrue(sortieLogs.contains("10"));
+            assertTrue(sortieLogs.contains("VALEUR TOTALE"));
         } finally {
-            // Toujours remettre le flux standard
-            System.setOut(originalOut);
+            logger.removeHandler(testHandler);
+            logger.setUseParentHandlers(originalUseParentHandlers);
+            logger.setLevel(originalLevel);
         }
     }
 
