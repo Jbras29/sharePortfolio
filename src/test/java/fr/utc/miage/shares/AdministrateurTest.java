@@ -21,11 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -316,5 +318,27 @@ public class AdministrateurTest {
 
         // Vérifier que la liste est vide
         assertTrue(actionsSansCours.isEmpty(), "La liste devrait être vide quand aucune action n'est publiée");
+    }
+
+    /**
+     * Teste la mise à jour du catalogue complet.
+     */
+    @Test
+    void testSetCatalogue () {
+        // Khởi tạo admin
+        Administrateur admin = new Administrateur("Navarre", "David");
+
+        // Tạo một danh sách mới
+        List<Action> nouveauCatalogue = new ArrayList<>();
+        nouveauCatalogue.add(new ActionSimple("AXA"));
+        nouveauCatalogue.add(new ActionSimple("Orange"));
+
+        // Gán danh sách mới cho admin
+        admin.setCatalogue(nouveauCatalogue);
+
+        // Kiểm tra (assertions)
+        assertNotNull(admin.getCatalogue(), "Le catalogue ne doit pas être nul.");
+        assertEquals(2, admin.getCatalogue().size(), "Le catalogue doit contenir exactement 2 actions.");
+        assertEquals(nouveauCatalogue, admin.getCatalogue(), "Le catalogue récupéré doit être identique à celui défini.");
     }
 }
