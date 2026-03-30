@@ -16,6 +16,7 @@
 package fr.utc.miage.shares;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 import fr.utc.miage.shares.TypeAction;
 
 /**
@@ -24,6 +25,8 @@ import fr.utc.miage.shares.TypeAction;
  * @author David Navarre &lt;David.Navarre at irit.fr&gt;
  */
 public abstract class Action {
+
+    private static final Logger LOGGER = Logger.getLogger(Action.class.getName());
 
     /* Le libellé de l'action (non-final pour permettre la modification) */
     private String libelle;
@@ -103,9 +106,9 @@ public abstract class Action {
 
     public TypeAction simpleOuComposee() {
         if (typeAction == TypeAction.SIMPLE) {
-            System.out.println("L'action '" + getLibelle() + "' est une action simple.");
+            LOGGER.info("L'action '" + getLibelle() + "' est une action simple.");
         } else if (typeAction == TypeAction.COMPOSE) {
-            System.out.println("L'action '" + getLibelle() + "' est une action composée.");
+            LOGGER.info("L'action '" + getLibelle() + "' est une action composée.");
         }
         return typeAction;
     }
