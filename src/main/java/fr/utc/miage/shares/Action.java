@@ -97,7 +97,7 @@ public abstract class Action {
         return typeAction;
     }
 
-    public void setTypeAction(TypeAction typeAction) {
+    protected void setTypeAction(TypeAction typeAction) {
         this.typeAction = typeAction;
     }
 
