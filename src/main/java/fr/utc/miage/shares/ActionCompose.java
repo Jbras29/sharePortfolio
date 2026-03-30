@@ -27,6 +27,7 @@ public class ActionCompose extends Action {
     public ActionCompose(String libelle) {
         super(libelle);
         actions = new HashMap<>();
+        this.typeAction = TypeAction.COMPOSE;
     }
 
     public Map<Action, Float> getActions() {
