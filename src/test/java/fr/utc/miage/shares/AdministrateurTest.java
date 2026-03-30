@@ -19,6 +19,8 @@ package fr.utc.miage.shares;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -85,7 +87,34 @@ public class AdministrateurTest {
     }
 
     @Test
-    public void testUpdateActionSimpleCours() {
+    void testSupprimerAction() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("Action France TV");
+        administrateur.publierAction(action);
+        administrateur.supprimerAction(action);
+        assertFalse(administrateur.getCatalogue().contains(action));
+    }
+
+    @Test
+    void testAnnulerSuppressionAction() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("Action France TV");
+        administrateur.publierAction(action);
+        administrateur.supprimerAction(action);
+        assertFalse(administrateur.getCatalogue().contains(action));
+        administrateur.publierAction(action);
+        assertTrue(administrateur.getCatalogue().contains(action));
+    }
+
+    @Test
+    void testSupprimerActionInexistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("Action France TV");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerAction(action));
+    }
+
+    @Test
+    void testUpdateActionSimpleCours() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("BNP");
