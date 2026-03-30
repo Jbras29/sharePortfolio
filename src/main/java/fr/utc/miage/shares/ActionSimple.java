@@ -19,38 +19,54 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Allows the creation of simple Action objects.
+ * Permet la création d'objets Action simples.
  *
  * @author David Navarre &lt;David.Navarre at irit.fr&gt;
  */
 public class ActionSimple extends Action {
 
-    private static final int DEFAULT_ACTION_VALUE = 0;
+    private static final float DEFAULT_ACTION_VALUE = 0.0f;
 
-    // attribut lien
+    /* Dictionnaire stockant les cours par jour */
     private final Map<Jour, Float> mapCours;
 
-    // constructeur
-    public ActionSimple(final String libelle) {
-        // Action simple initialisée comme 1 action
+    /**
+     * Constructeur d'une ActionSimple.
+     *
+     * @param libelle le nom de l'action
+     */
+    public ActionSimple(String libelle) {
         super(libelle);
-        // init spécifique
         this.mapCours = new HashMap<>();
+        this.typeAction = TypeAction.SIMPLE;
     }
 
-    // enrg possible si pas de cours pour ce jour
-    public void enrgCours(final Jour j, final float v) {
-        if (!this.mapCours.containsKey(j)) {
-            this.mapCours.put(j, v);
+    /**
+     * Enregistre ou met à jour le cours pour un jour donné.
+     * Cette méthode permet à l'administrateur de modifier une valeur existante.
+     *
+     * @param j le jour concerné
+     * @param v la nouvelle valeur du cours
+     */
+    public void enregistrerCours(final Jour j, final float v) {
+        // Suppression de la condition 'if (!containsKey)' pour permettre la modification
+        if (v < 0) {
+            throw new IllegalArgumentException("Le cours ne peut pas être négatif.");
         }
+        this.mapCours.put(j, v);
+    }
+
+    /**
+     * Méthode alternative si vous voulez conserver 'enrgCours' pour la compatibilité,
+     * mais 'enregistrerCours' est nécessaire pour corriger votre erreur de compilation.
+     */
+    public void enrgCours(final Jour j, final float v) {
+        this.enregistrerCours(j, v);
     }
 
     @Override
     public float valeur(final Jour j) {
-        if (this.mapCours.containsKey(j)) {
-            return this.mapCours.get(j);
-        } else {
-            return DEFAULT_ACTION_VALUE;
-        }
+        // Utilisation de getOrDefault pour simplifier le code
+        return this.mapCours.getOrDefault(j, DEFAULT_ACTION_VALUE);
     }
 }

@@ -16,121 +16,88 @@
 package fr.utc.miage.shares;
 
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
+import java.time.DateTimeException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Classe de test pour la classe Jour (version LocalDate).
+ */
 class JourTest {
 
-    private static final int DEFAULT_YEAR = 1;
-    private static final int DEFAULT_DAY = 1;
-    private static final int INVALID_YEAR = 0;
-    private static final int INVALID_DAY = 0;
+    private static final int DEFAULT_YEAR = 2026;
+    private static final int DEFAULT_MONTH = 3;
+    private static final int DEFAULT_DAY = 30;
 
     @Test
     void testAllConstructorUsage() {
-        Assertions.assertAll("Group of constructor tests",
-                () -> assertDoesNotThrow(() -> {
-                    new Jour(DEFAULT_YEAR, DEFAULT_DAY);
-                }),
-                () -> assertThrows(IllegalArgumentException.class, () -> {
-                    new Jour(DEFAULT_YEAR, INVALID_DAY);
-                }, "The day argument should be strictly more than 0"),
-                () -> assertThrows(IllegalArgumentException.class, () -> {
-                    new Jour(INVALID_YEAR, DEFAULT_DAY);
-                }, "The year argument should be strictly more than 0")
+        Assertions.assertAll("Groupe de tests sur le constructeur",
+                // Test valide
+                () -> assertDoesNotThrow(() -> new Jour(DEFAULT_YEAR, DEFAULT_MONTH, DEFAULT_DAY)),
+
+                // Test mois invalide (ex: mois 13)
+                () -> assertThrows(DateTimeException.class, () -> {
+                    new Jour(DEFAULT_YEAR, 13, DEFAULT_DAY);
+                }, "Le mois doit être compris entre 1 et 12"),
+
+                // Test jour invalide (ex: 31 février)
+                () -> assertThrows(DateTimeException.class, () -> {
+                    new Jour(2026, 2, 30);
+                }, "Le 30 février n'existe pas")
         );
     }
 
-    
     @Test
-    void testAccessorShouldWork() {
-        final Jour jour = getDefaultJour();
-        final int resultDay = jour.getDay();
-        final int resultYear = jour.getYear();
-        Assertions.assertAll("Grouped assertions on accessors",
-                () -> assertEquals(DEFAULT_DAY, resultDay, "Day should be the one used for creation"),
-                () -> assertEquals(DEFAULT_YEAR, resultYear, "Year should be the one used for creation"));
-    }
-
-    @Test
-    void testHashCode() {
-        final Jour jour = getDefaultJour();
-        assertDoesNotThrow(jour::hashCode, "hashcode must always provide a value");
-    }
-
-    @Test
-    void testEqualsWithSameObjectShouldWork() {
-        final Jour jour1 = getDefaultJour();
-        final Jour jour2 = getDefaultJour();
-
-        assertEquals(jour1, jour2, "Objects Jour with the same day and year should be equals");
-    }
-
-    @Test
-    void testEqualsWithEqualObjectShouldWork() {
-        final Jour jour1 = getDefaultJour();
-
-        assertEquals(jour1, jour1, "An Object Jour shouldbe equals to itself");
-    }
-
-    @Test
-    void testNotEqualsWithDifferentDaysShouldWork() {
-        final Jour jour1 = getDefaultJour();
-        final Jour jour2 = new Jour(DEFAULT_YEAR, DEFAULT_DAY + 1);
-
-        assertNotEquals(jour1, jour2, "Objects Jour with different days should not be equals");
-    }
-
-    @Test
-    void testNotEqualsWithDifferentYearsShouldWork() {
-        final Jour jour1 = getDefaultJour();
-        final Jour jour2 = new Jour(DEFAULT_YEAR + 1, DEFAULT_DAY);
-
-        assertNotEquals(jour1, jour2, "Objects Jour with different years should not be equals");
-    }
-
-    @Test
-    void testNotEqualsWithDifferentYearsAndDaysShouldWork() {
-        final Jour jour1 = getDefaultJour();
-        final Jour jour2 = new Jour(DEFAULT_YEAR + 1, DEFAULT_DAY + 1);
-
-        assertNotEquals(jour1, jour2, "Objects Jour with different years and days should not be equals");
-    }
-
-    @Test
-    void testNotEqualsWithNullObjectShouldWork() {
-        final Jour jour1 = getDefaultJour();
-        final Jour jour2 = null;
-
-        assertNotEquals(jour1, jour2, "An Object Jour cannot be equals to null");
-    }
-
-    @Test
-    void testNotEqualsWithDifferentClassShouldWork() {
-        final Jour jour1 = getDefaultJour();
-        final Integer jour2 = 0;
-
-        assertNotEquals(jour1, jour2, "Objects Jour cannot be equals to objects from another class");
-    }
-
-    @Test
-    void testToStringWithDedicatedLayout() {
+    void testAccessorsShouldWork() {
         final Jour jour = getDefaultJour();
 
-        final String result = jour.toString();
-        final String expected = "Jour [year=" + DEFAULT_YEAR + ", day=" + DEFAULT_DAY + "]";
+        Assertions.assertAll("Vérification des accesseurs",
+                () -> assertEquals(DEFAULT_YEAR, jour.getYear(), "L'année est incorrecte"),
+                () -> assertEquals(DEFAULT_MONTH, jour.getMonth(), "Le mois est incorrect"),
+                () -> assertEquals(DEFAULT_DAY, jour.getDayOfMonth(), "Le jour du mois est incorrect")
+        );
+    }
 
-        assertEquals(expected, result,
-                "ToString should be format as \"Jour [year=\" + year + \", day=\" + day + \"]\"");
+    @Test
+    void testEqualsAndHashCode() {
+        final Jour jour1 = getDefaultJour();
+        final Jour jour2 = new Jour(2026, 3, 30);
+        final Jour jourDiff = new Jour(2026, 3, 31);
+
+        Assertions.assertAll("Tests d'égalité et de hashcode",
+                () -> assertEquals(jour1, jour1, "Un objet doit être égal à lui-même"),
+                () -> assertEquals(jour1, jour2, "Deux objets avec la même date doivent être égaux"),
+                () -> assertNotEquals(jour1, jourDiff, "Deux dates différentes ne doivent pas être égales"),
+                () -> assertNotEquals(jour1, null, "Un objet ne peut pas être égal à null"),
+                () -> assertEquals(jour1.hashCode(), jour2.hashCode(), "Le hashcode doit être identique pour deux dates égales")
+        );
+    }
+
+    @Test
+    void testComparable() {
+        final Jour jour1 = new Jour(2026, 1, 1);
+        final Jour jour2 = new Jour(2026, 1, 2);
+
+        assertTrue(jour1.compareTo(jour2) < 0, "Le 1er janvier doit être avant le 2 janvier");
+        assertTrue(jour2.compareTo(jour1) > 0, "Le 2 janvier doit être après le 1er janvier");
+        assertEquals(0, jour1.compareTo(new Jour(2026, 1, 1)), "La comparaison de dates identiques doit retourner 0");
+    }
+
+    @Test
+    void testToStringFormat() {
+        final Jour jour = new Jour(2026, 3, 30);
+        // Le format attendu selon DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        final String expected = "30/03/2026";
+
+        assertEquals(expected, jour.toString(), "Le format toString doit être dd/MM/yyyy");
     }
 
     /**
-     * Creates a Jour object with default year and day.
+     * Crée un objet Jour par défaut pour les tests.
      */
     private Jour getDefaultJour() {
-        return new Jour(DEFAULT_YEAR, DEFAULT_DAY);
+        return new Jour(DEFAULT_YEAR, DEFAULT_MONTH, DEFAULT_DAY);
     }
 }
