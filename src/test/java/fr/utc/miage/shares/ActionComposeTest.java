@@ -238,4 +238,22 @@ class ActionComposeTest {
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertThrows(IllegalArgumentException.class, () -> actionCompose.updateProportion(action1, -0.1f));
     }
+
+    @Test
+    void valeur_compositionAvecCours_retourneValeurCorrecte() {
+        ActionCompose actionCompose = new ActionCompose(Test_ActionCompose);
+        ActionSimple action1 = new ActionSimple(Test_Action1);
+        ActionSimple action2 = new ActionSimple(Test_Action2);
+
+        Jour jour = new Jour(2025, 3, 23);
+        action1.enrgCours(jour, 100f);
+        action2.enrgCours(jour, 200f);
+
+        actionCompose.addAction(action1, 0.4f);
+        actionCompose.addAction(action2, 0.6f);
+
+        float result = actionCompose.valeur(jour);
+
+        assertEquals(160f, result, 0.0001f); // (100*0.4) + (200*0.6)
+    }
 }
