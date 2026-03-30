@@ -69,6 +69,14 @@ public class UserTest {
     }
 
     @Test
+    void testGetInfoAction() {
+        User user = new User("Doe", "John");
+        Action action = new ActionSimple("Action France TV");
+        ActionDTO actionDTO = user.getInfoAction(action);
+        assertEquals("Action France TV", actionDTO.libelle());
+        assertEquals(TypeAction.SIMPLE, actionDTO.typeAction());
+    }
+
     void quantitePossede_portefeuilleVide_retourneMapVide() {
         User user = new User("Doe", "John");
         Map<Action, Integer> result = user.quantitePossede();
