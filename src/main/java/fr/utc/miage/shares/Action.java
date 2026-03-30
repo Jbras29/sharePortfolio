@@ -19,39 +19,50 @@ import java.util.Objects;
 import fr.utc.miage.shares.TypeAction;
 
 /**
- * This class embeds thecommon behavior of any Action object.
+ * Cette classe définit le comportement commun de tout objet Action.
  *
  * @author David Navarre &lt;David.Navarre at irit.fr&gt;
  */
 public abstract class Action {
 
-    private final String libelle;
+    /* Le libellé de l'action (non-final pour permettre la modification) */
+    private String libelle;
 
     protected TypeAction typeAction;
 
     /**
-     * Get the value of libelle
+     * Retourne la valeur du libellé.
      *
-     * @return the value of libelle
+     * @return le libellé de l'action
      */
     public String getLibelle() {
         return libelle;
     }
 
     /**
-     * Builds an Action object from a string parameter.
+     * Définit ou modifie le libellé de l'action.
+     * Cette méthode permet à un administrateur de mettre à jour le nom.
      *
-     * @param libelle the name of the action object
+     * @param libelle le nouveau nom de l'action
+     */
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    /**
+     * Construit une Action à partir d'un paramètre String.
+     *
+     * @param libelle le nom de l'objet action
      */
     protected Action(final String libelle) {
         this.libelle = libelle;
     }
 
     /**
-     * Provides the value of the action object for a given day.
+     * Fournit la valeur de l'objet action pour un jour donné.
      *
-     * @param j
-     * @return
+     * @param j le jour concerné
+     * @return la valeur de l'action
      */
     public abstract float valeur(Jour j);
 
@@ -64,6 +75,9 @@ public abstract class Action {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
         if (obj == null) {
             return false;
         }

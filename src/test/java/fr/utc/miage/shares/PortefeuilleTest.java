@@ -133,7 +133,7 @@ class PortefeuilleTest {
 
         try {
             portefeuille.acheterAction(actionApple, 10);
-            Jour aujourdHui = new Jour(2024, 1);
+            Jour aujourdHui = new Jour(2024, 1,10);
             portefeuille.afficherDetailsPortefeuille(aujourdHui);
 
             String sortieConsole = outputStreamCaptor.toString();
