@@ -110,4 +110,13 @@ class ActionTest {
         }
     }
 
+    @Test 
+    void testSimpleouComposee() {
+        final Action actionSimple = new ActionSimple(FOO_SHARE1);
+        final Action actionCompose = new ActionCompose(FOO_SHARE2);
+
+        Assertions.assertDoesNotThrow(actionSimple::SimpleouComposee, "Method should not throw an exception for ActionSimple");
+        Assertions.assertDoesNotThrow(actionCompose::SimpleouComposee, "Method should not throw an exception for ActionCompose");
+    }
+
 }

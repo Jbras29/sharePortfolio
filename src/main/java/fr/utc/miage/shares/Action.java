@@ -96,4 +96,18 @@ public abstract class Action {
     public TypeAction getTypeAction() {
         return typeAction;
     }
+
+    public void setTypeAction(TypeAction typeAction) {
+        this.typeAction = typeAction;
+    }
+
+    public void SimpleouComposee() {
+        if (this instanceof ActionSimple) {
+            System.out.println("Action simple");
+        } else if (this instanceof ActionCompose) {
+            System.out.println("Action composée");
+        } else {
+            System.out.println("Type d'action inconnu");
+        }
+    }
 }
