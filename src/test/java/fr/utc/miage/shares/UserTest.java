@@ -15,12 +15,14 @@
  */
 package fr.utc.miage.shares;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -167,6 +169,65 @@ class UserTest {
         User user = new User("Doe", "John");
 
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
+    }
+
+    @Test
+    void estFavori_actionAjoutee_retourneTrue() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        user.ajouterFavori(action);
+
+        assertTrue(user.estFavori(action));
+    }
+
+    @Test
+    void estFavori_actionNonAjoutee_retourneFalse() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+
+        assertFalse(user.estFavori(action));
+    }
+
+    @Test
+    void supprimerFavori_actionPresente_retourneTrueEtRetireAction() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        user.ajouterFavori(action);
+
+        boolean result = user.supprimerFavori(action);
+
+        assertTrue(result);
+        assertFalse(user.estFavori(action));
+    }
+
+    @Test
+    void supprimerFavori_actionAbsente_retourneFalse() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+
+        assertFalse(user.supprimerFavori(action));
+    }
+
+    @Test
+    void supprimerFavori_actionNull_leveException() {
+        User user = new User("Doe", "John");
+
+        assertThrows(IllegalArgumentException.class, () -> user.supprimerFavori(null));
+    }
+
+    @Test
+    void getInfoAction_actionSimple_retourneDtoCorrect() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        LocalDate today = LocalDate.now();
+        Jour jourActuel = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+        action.enrgCours(jourActuel, 123.45f);
+
+        ActionDTO info = user.getInfoAction(action);
+
+        assertEquals("Apple", info.libelle());
+        assertEquals(TypeAction.SIMPLE, info.typeAction());
+        assertEquals(123.45f, info.valeur());
     }
 
 

@@ -123,4 +123,59 @@ class ActionSimpleTest {
             action.afficherAnalyseCourbe(j1, j2);
         }, "La méthode d'affichage ne doit pas lever d'exception");
     }
+
+    @Test
+    void testEqualsWithSameReferenceShouldReturnTrue() {
+        ActionSimple action = new ActionSimple(LIBELLE);
+
+        assertTrue(action.equals(action));
+    }
+
+    @Test
+    void testEqualsWithNullShouldReturnFalse() {
+        ActionSimple action = new ActionSimple(LIBELLE);
+
+        assertFalse(action.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentTypeShouldReturnFalse() {
+        ActionSimple actionSimple = new ActionSimple(LIBELLE);
+        ActionCompose actionCompose = new ActionCompose(LIBELLE);
+
+        assertFalse(actionSimple.equals(actionCompose));
+    }
+
+    @Test
+    void testEqualsWithSameLibelleAndSameCoursShouldReturnTrue() {
+        ActionSimple action1 = new ActionSimple(LIBELLE);
+        ActionSimple action2 = new ActionSimple(LIBELLE);
+        Jour jour = new Jour(2026, 3, 30);
+
+        action1.enregistrerCours(jour, 100f);
+        action2.enregistrerCours(jour, 100f);
+
+        assertTrue(action1.equals(action2));
+        assertTrue(action2.equals(action1));
+    }
+
+    @Test
+    void testEqualsWithDifferentLibelleShouldReturnFalse() {
+        ActionSimple action1 = new ActionSimple("AXA");
+        ActionSimple action2 = new ActionSimple("TOTAL");
+
+        assertFalse(action1.equals(action2));
+    }
+
+    @Test
+    void testEqualsWithDifferentCoursShouldReturnFalse() {
+        ActionSimple action1 = new ActionSimple(LIBELLE);
+        ActionSimple action2 = new ActionSimple(LIBELLE);
+        Jour jour = new Jour(2026, 3, 30);
+
+        action1.enregistrerCours(jour, 100f);
+        action2.enregistrerCours(jour, 120f);
+
+        assertFalse(action1.equals(action2));
+    }
 }
