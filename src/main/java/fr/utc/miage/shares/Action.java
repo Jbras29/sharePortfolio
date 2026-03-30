@@ -101,7 +101,7 @@ public abstract class Action {
         this.typeAction = typeAction;
     }
 
-    public void SimpleouComposee() {
+    public void simpleOuComposee() {
         if (this instanceof ActionSimple) {
             System.out.println("Action simple");
         } else if (this instanceof ActionCompose) {
