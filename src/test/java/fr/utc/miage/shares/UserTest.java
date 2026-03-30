@@ -166,4 +166,43 @@ public class UserTest {
 
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
+
+    @Test
+    void getInfoAction_actionSimple_retourneTypeSimple() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        Jour jour = new Jour(2025, 1, 1);
+        action.enrgCours(jour, 100f);
+
+        ActionDTO dto = user.getInfoAction(action);
+
+        assertEquals("Apple", dto.libelle());
+        assertEquals(TypeAction.SIMPLE, dto.typeAction());
+        assertNotNull(dto.valeur());
+    }
+
+    @Test
+    void getInfoAction_actionCompose_retourneTypeCompose() {
+        User user = new User("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Apple");
+        ActionSimple action2 = new ActionSimple("Google");
+        ActionCompose actionCompose = new ActionCompose("CAC40");
+        actionCompose.addAction(action1, 0.5f);
+        actionCompose.addAction(action2, 0.5f);
+
+        ActionDTO dto = user.getInfoAction(actionCompose);
+
+        assertEquals("CAC40", dto.libelle());
+        assertEquals(TypeAction.COMPOSE, dto.typeAction());
+    }
+
+    @Test
+    void getInfoAction_retourneLibelleCorrect() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Tesla");
+
+        ActionDTO dto = user.getInfoAction(action);
+
+        assertEquals("Tesla", dto.libelle());
+    }
 }
