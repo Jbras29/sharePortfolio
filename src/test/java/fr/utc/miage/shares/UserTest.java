@@ -179,7 +179,7 @@ public class UserTest {
 
         assertEquals("Apple", dto.libelle());
         assertEquals(TypeAction.SIMPLE, dto.typeAction());
-        assertNotNull(dto.valeur());
+        assertEquals(100f, dto.valeur());
     }
 
     @Test
