@@ -192,4 +192,38 @@ class PortefeuilleTest {
         assertTrue(portefeuille.vendreAction(actionMSFT, 5));
         assertEquals(5, portefeuille.getMapActions().get(actionMSFT));
     }
-}
+
+    @Test
+    void afficherPourcentagePortefeuilleWithFiveActions() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        ActionSimple actionB = new ActionSimple("ActionB");
+        ActionSimple actionC = new ActionSimple("ActionC");
+        ActionSimple actionD = new ActionSimple("ActionD");
+        ActionSimple actionE = new ActionSimple("ActionE");
+        
+        Administrateur administrateur = new Administrateur(null, null);
+
+        portefeuille.acheterAction(actionA, 10);
+        portefeuille.acheterAction(actionB, 20);
+        portefeuille.acheterAction(actionC, 30);
+        portefeuille.acheterAction(actionD, 40);
+        portefeuille.acheterAction(actionE, 50);
+
+        Jour jour = new Jour(2024, 1, 10);
+        administrateur.updateActionSimpleCours(actionA, jour, 1);
+        administrateur.updateActionSimpleCours(actionB, jour, 2);
+        administrateur.updateActionSimpleCours(actionC, jour, 3);
+        administrateur.updateActionSimpleCours(actionD, jour, 4);
+        administrateur.updateActionSimpleCours(actionE, jour, 5);
+
+
+        Map<Action, Double> pourcentages = portefeuille.afficherPourcentagePortefeuille(jour);
+
+        assertEquals(5, pourcentages.size());
+        assertTrue(pourcentages.containsKey(actionA));
+        assertTrue(pourcentages.containsKey(actionB));
+        assertTrue(pourcentages.containsKey(actionC));
+        assertTrue(pourcentages.containsKey(actionD));
+        assertTrue(pourcentages.containsKey(actionE));
+    }
+    }
