@@ -23,6 +23,7 @@ public class Portefeuille {
     private final String nom;
     private String type;
     private Map<Action, Integer> mapActions;
+    private Map<Action, Integer> mapActionsInitial;
 
     public Portefeuille(final String nom, final String type, Map<Action, Integer> mapActions) {
         this.nom = nom;
@@ -151,6 +152,10 @@ public class Portefeuille {
         // Vérification de la validité de la quantité
         if (quantite <= 0) {
             throw new IllegalArgumentException("La quantité à acheter doit être strictement positive.");
+        }
+
+        if (action == null) {
+            throw new IllegalArgumentException("L'action à acheter ne peut pas être nulle.");
         }
 
         // Si le portefeuille contient déjà cette action, on met à jour la quantité
