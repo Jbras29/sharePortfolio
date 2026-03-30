@@ -17,6 +17,7 @@
 
 package fr.utc.miage.shares;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -102,5 +103,21 @@ public class Administrateur extends User {
             System.out.println("Impossible de supprimer l'action '" + actionSimple.getLibelle() + "' de l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez si l'action est présente dans la composition.");
             throw new IllegalArgumentException("Action must be valid and already exist in the composition.");
         }
+    }
+
+    public List<Action> retrieveActionsWithNoCours(Jour j) {
+        List<Action> actionsWithoutCours = new ArrayList<>();
+        for (Action action : catalogue) {
+            if (action.valeur(j) == 0.0f) { // 0.0f signifie "pas de cours enregistré"
+                actionsWithoutCours.add(action);
+            }
+        }
+        return actionsWithoutCours;
+    }
+
+    public List<Action> retrieveActionsWithNoCoursCurrentDate() {
+        LocalDate currentDate = LocalDate.now(); // Obtenir la date actuelle
+        Jour today = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
+        return retrieveActionsWithNoCours(today);
     }
 }

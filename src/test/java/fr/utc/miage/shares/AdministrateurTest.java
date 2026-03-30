@@ -25,7 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AdministrateurTest {
@@ -239,5 +241,80 @@ public class AdministrateurTest {
 
         // 5. Vérifier qu'il n'y a pas de doublon (la taille doit rester 1)
         assertEquals(1, catalogue.size(), "Le Set ne doit contenir qu'un seul élément");
+    }
+
+    @Test
+    public void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionsWithoutCourse() {
+        // Initialisation locale
+        Administrateur admin = new Administrateur("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Action1");
+        ActionSimple action2 = new ActionSimple("Action2");
+
+        // Publier les actions
+        admin.publierAction(action1);
+        admin.publierAction(action2);
+
+        // Récupérer les actions sans cours pour la date actuelle
+        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
+
+        // Vérifier que action1 et action2 sont dans la liste
+        assertTrue(actionsSansCours.contains(action1), "Action1 devrait être dans la liste des actions sans cours");
+        assertTrue(actionsSansCours.contains(action2), "Action2 devrait être dans la liste des actions sans cours");
+    }
+
+    @Test
+    public void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionWithoutCourseWhenOtherHasCourse() {
+        // Initialisation locale
+        Administrateur admin = new Administrateur("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Action1");
+        ActionSimple action2 = new ActionSimple("Action2");
+
+        // Publier les actions
+        admin.publierAction(action1);
+        admin.publierAction(action2);
+
+        // Mettre à jour le cours de action1 pour la date actuelle
+        LocalDate currentDate = LocalDate.now();
+        Jour today = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
+        admin.updateActionSimpleCours(action1, today, 100.0f);
+
+        // Récupérer les actions sans cours pour la date actuelle
+        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
+
+        // Vérifier que action2 est dans la liste
+        assertTrue(actionsSansCours.contains(action2), "Action2 devrait être dans la liste des actions sans cours");
+    }
+
+    @Test
+    public void testRetrieveActionsWithNoCoursCurrentDate_DoesNotIncludeActionWithCourse() {
+        // Initialisation locale
+        Administrateur admin = new Administrateur("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Action1");
+
+        // Publier l'action
+        admin.publierAction(action1);
+
+        // Mettre à jour le cours de action1 pour la date actuelle
+        LocalDate currentDate = LocalDate.now();
+        Jour today = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
+        admin.updateActionSimpleCours(action1, today, 100.0f);
+
+        // Récupérer les actions sans cours pour la date actuelle
+        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
+
+        // Vérifier que action1 n'est pas dans la liste
+        assertFalse(actionsSansCours.contains(action1), "Action1 ne devrait pas être dans la liste car elle a un cours");
+    }
+
+    @Test
+    public void testRetrieveActionsWithNoCoursCurrentDate_WithEmptyCatalogue() {
+        // Initialisation locale
+        Administrateur admin = new Administrateur("Doe", "John");
+
+        // Récupérer les actions sans cours pour la date actuelle
+        List<Action> actionsSansCours = admin.retrieveActionsWithNoCoursCurrentDate();
+
+        // Vérifier que la liste est vide
+        assertTrue(actionsSansCours.isEmpty(), "La liste devrait être vide quand aucune action n'est publiée");
     }
 }
