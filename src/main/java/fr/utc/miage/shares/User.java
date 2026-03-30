@@ -92,5 +92,7 @@ public class User {
         throw new IllegalArgumentException("L'action ne peut pas être nulle.");
     }
     return this.favoris.add(action); 
-}
+    }
+
+    
 }
