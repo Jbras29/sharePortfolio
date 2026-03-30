@@ -21,7 +21,7 @@ import fr.utc.miage.shares.TypeAction;
 /**
  * Cette classe définit le comportement commun de tout objet Action.
  *
- * @author David Navarre <David.Navarre at irit.fr>
+ * @author David Navarre &lt;David.Navarre at irit.fr&gt;
  */
 public abstract class Action {
 
