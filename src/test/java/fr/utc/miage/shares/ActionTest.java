@@ -119,4 +119,13 @@ class ActionTest {
         Assertions.assertDoesNotThrow(() -> actionCompose.simpleOuComposee(), "Method should not throw an exception for ActionCompose");
     }
 
+    @Test
+    void testSetTypeAction() {
+        final Action action = new ActionSimple(FOO_SHARE1);
+        Assertions.assertEquals(TypeAction.SIMPLE, action.getTypeAction(), "Initial type should be SIMPLE");
+
+        action.setTypeAction(TypeAction.COMPOSE);
+        Assertions.assertEquals(TypeAction.COMPOSE, action.getTypeAction(), "Type should be updated to COMPOSE");
+    }
+
 }

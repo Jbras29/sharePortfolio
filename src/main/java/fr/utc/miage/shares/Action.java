@@ -106,8 +106,6 @@ public abstract class Action {
             System.out.println("L'action '" + getLibelle() + "' est une action simple.");
         } else if (typeAction == TypeAction.COMPOSE) {
             System.out.println("L'action '" + getLibelle() + "' est une action composée.");
-        } else {
-            System.out.println("Le type de l'action '" + getLibelle() + "' est inconnu.");
         }
         return typeAction;
     }
