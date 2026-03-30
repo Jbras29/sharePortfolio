@@ -101,13 +101,14 @@ public abstract class Action {
         this.typeAction = typeAction;
     }
 
-    public void simpleOuComposee() {
-        if (this instanceof ActionSimple) {
-            System.out.println("Action simple");
-        } else if (this instanceof ActionCompose) {
-            System.out.println("Action composée");
+    public TypeAction simpleOuComposee() {
+        if (typeAction == TypeAction.SIMPLE) {
+            System.out.println("L'action '" + getLibelle() + "' est une action simple.");
+        } else if (typeAction == TypeAction.COMPOSE) {
+            System.out.println("L'action '" + getLibelle() + "' est une action composée.");
         } else {
-            System.out.println("Type d'action inconnu");
+            System.out.println("Le type de l'action '" + getLibelle() + "' est inconnu.");
         }
+        return typeAction;
     }
 }
