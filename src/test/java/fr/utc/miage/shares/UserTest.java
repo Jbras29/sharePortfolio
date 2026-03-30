@@ -22,9 +22,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
@@ -253,5 +259,45 @@ public class UserTest {
 
         assertTrue(resultat.isPresent());
         assertEquals("Apple", resultat.get().getLibelle());
-}
     }
+  
+    @Test
+    void getInfoAction_actionSimple_retourneTypeSimple() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        LocalDate today = LocalDate.now();
+        Jour jour = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+        action.enrgCours(jour, 100f);
+
+        ActionDTO dto = user.getInfoAction(action);
+
+        assertEquals("Apple", dto.libelle());
+        assertEquals(TypeAction.SIMPLE, dto.typeAction());
+        assertEquals(100f, dto.valeur());
+    }
+
+    @Test
+    void getInfoAction_actionCompose_retourneTypeCompose() {
+        User user = new User("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Apple");
+        ActionSimple action2 = new ActionSimple("Google");
+        ActionCompose actionCompose = new ActionCompose("CAC40");
+        actionCompose.addAction(action1, 0.5f);
+        actionCompose.addAction(action2, 0.5f);
+
+        ActionDTO dto = user.getInfoAction(actionCompose);
+
+        assertEquals("CAC40", dto.libelle());
+        assertEquals(TypeAction.COMPOSE, dto.typeAction());
+    }
+
+    @Test
+    void getInfoAction_retourneLibelleCorrect() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Tesla");
+
+        ActionDTO dto = user.getInfoAction(action);
+
+        assertEquals("Tesla", dto.libelle());
+    }
+}
