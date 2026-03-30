@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -75,11 +76,11 @@ public class Portefeuille {
      */
     public void afficherDetailsPortefeuille(Jour jour) {
         // Affichage de l'en-tête du tableau
-        LOGGER.info("=== Portefeuille : " + this.nom + " (" + this.type + ") ===");
+        LOGGER.log(Level.INFO, "=== Portefeuille : {0} ({1}) ===", new Object[]{this.nom, this.type});
         final String separator = "-------------------------------------------------------------------------";
-        LOGGER.info(separator);
-        LOGGER.info(String.format("%-20s | %-10s | %-15s | %-15s", "Libellé", "Quantité", "Valeur Unitaire", "Valeur Globale"));
-        LOGGER.info(separator);
+        LOGGER.log(Level.INFO, "{0}", separator);
+        LOGGER.log(Level.INFO, "{0} | {1} | {2} | {3}", new Object[]{"Libellé", "Quantité", "Valeur Unitaire", "Valeur Globale"});
+        LOGGER.log(Level.INFO, "{0}", separator);
 
         float valeurTotalePortefeuille = 0f;
 
@@ -101,14 +102,14 @@ public class Portefeuille {
             valeurTotalePortefeuille += valeurGlobale;
 
             // Affichage formaté de la ligne pour l'action courante
-            LOGGER.info(String.format("%-20s | %-10d | %-15.2f | %-15.2f",
-                    libelle, quantite, valeurUnitaire, valeurGlobale));
+            LOGGER.log(Level.INFO, "{0} | {1} | {2} | {3}",
+                    new Object[]{libelle, quantite, valeurUnitaire, valeurGlobale});
         }
 
         // Affichage du pied de page avec la valeur totale du portefeuille
-        LOGGER.info(separator);
-        LOGGER.info(String.format("%-51s | %-15.2f", "VALEUR TOTALE DU PORTEFEUILLE", valeurTotalePortefeuille));
-        LOGGER.info("=========================================================================");
+        LOGGER.log(Level.INFO, "{0}", separator);
+        LOGGER.log(Level.INFO, "{0} | {1}", new Object[]{"VALEUR TOTALE DU PORTEFEUILLE", valeurTotalePortefeuille});
+        LOGGER.log(Level.INFO, "{0}", "=========================================================================");
     }
 
     /**

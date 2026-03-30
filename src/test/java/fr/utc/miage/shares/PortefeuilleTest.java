@@ -17,6 +17,7 @@ package fr.utc.miage.shares;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,7 +179,11 @@ class PortefeuilleTest {
         Handler testHandler = new Handler() {
             @Override
             public void publish(LogRecord recordT) {
-                logsCaptor.append(recordT.getMessage()).append("\n");
+                if (recordT.getParameters() != null) {
+                    logsCaptor.append(MessageFormat.format(recordT.getMessage(), recordT.getParameters())).append("\n");
+                } else {
+                    logsCaptor.append(recordT.getMessage()).append("\n");
+                }
             }
 
             @Override
