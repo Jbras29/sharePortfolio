@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 
 import java.util.Map;
 
@@ -169,6 +171,48 @@ class ActionComposeTest {
 
         assertEquals(actionCompose1, actionCompose2);
         assertEquals(actionCompose1.hashCode(), actionCompose2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithSameReference() {
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+
+        assertEquals(actionCompose, actionCompose);
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+
+        assertNotEquals(null, actionCompose);
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        ActionCompose actionCompose = new ActionCompose(TEST_ACTION_COMPOSE);
+
+        assertNotEquals("not an action", actionCompose);
+    }
+
+    @Test
+    void testEqualsWithDifferentLibelle() {
+        ActionCompose actionCompose1 = new ActionCompose("CAC40");
+        ActionCompose actionCompose2 = new ActionCompose("DAX40");
+
+        assertNotEquals(actionCompose1, actionCompose2);
+    }
+
+    @Test
+    void testEqualsWithDifferentActionsMap() {
+        ActionCompose actionCompose1 = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionCompose actionCompose2 = new ActionCompose(TEST_ACTION_COMPOSE);
+        ActionSimple action1 = new ActionSimple(TEST_ACTION_1);
+        ActionSimple action2 = new ActionSimple(TEST_ACTION_2);
+
+        assertTrue(actionCompose1.addAction(action1, 1.0f));
+        assertTrue(actionCompose2.addAction(action2, 1.0f));
+
+        assertNotEquals(actionCompose1, actionCompose2);
     }
 
     @Test
