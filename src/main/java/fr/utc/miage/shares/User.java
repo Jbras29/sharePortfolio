@@ -103,5 +103,13 @@ public class User {
 public boolean estFavori(Action action) {
     return this.favoris.contains(action);
 }
-
+public float getPrixAction(Action action, Jour jour){
+    if(action==null){
+        throw new IllegalArgumentException("L'action ne peut pas être nulle");
+    }
+    if(jour==null){
+        throw new IllegalArgumentException("Le jour ne peut pas être nul");
+    }
+    return action.valeur(jour);
+}
 }
