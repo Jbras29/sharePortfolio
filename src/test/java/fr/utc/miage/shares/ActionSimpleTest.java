@@ -18,8 +18,9 @@ package fr.utc.miage.shares;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 
@@ -128,14 +129,14 @@ class ActionSimpleTest {
     void testEqualsWithSameReferenceShouldReturnTrue() {
         ActionSimple action = new ActionSimple(LIBELLE);
 
-        assertTrue(action.equals(action));
+        assertEquals(action, action, "Un objet doit être égal à lui-même");
     }
 
     @Test
     void testEqualsWithNullShouldReturnFalse() {
         ActionSimple action = new ActionSimple(LIBELLE);
 
-        assertFalse(action.equals(null));
+        assertNotEquals(null, action, "Un objet ne doit pas être égal à null");
     }
 
     @Test
@@ -143,7 +144,7 @@ class ActionSimpleTest {
         ActionSimple actionSimple = new ActionSimple(LIBELLE);
         ActionCompose actionCompose = new ActionCompose(LIBELLE);
 
-        assertFalse(actionSimple.equals(actionCompose));
+        assertNotEquals(actionSimple, actionCompose, "Les objets de types différents ne doivent pas être égaux");
     }
 
     @Test
@@ -155,8 +156,8 @@ class ActionSimpleTest {
         action1.enregistrerCours(jour, 100f);
         action2.enregistrerCours(jour, 100f);
 
-        assertTrue(action1.equals(action2));
-        assertTrue(action2.equals(action1));
+        assertEquals(action1, action2, "Les objets avec le même libellé et le même cours doivent être égaux");
+        assertEquals(action2, action1, "Les objets avec le même libellé et le même cours doivent être égaux");
     }
 
     @Test
@@ -164,7 +165,7 @@ class ActionSimpleTest {
         ActionSimple action1 = new ActionSimple("AXA");
         ActionSimple action2 = new ActionSimple("TOTAL");
 
-        assertFalse(action1.equals(action2));
+        assertNotEquals(action1, action2, "Les objets avec des libellés différents ne doivent pas être égaux");
     }
 
     @Test
@@ -176,6 +177,6 @@ class ActionSimpleTest {
         action1.enregistrerCours(jour, 100f);
         action2.enregistrerCours(jour, 120f);
 
-        assertFalse(action1.equals(action2));
+        assertNotEquals(action1, action2, "Les objets avec des cours différents ne doivent pas être égaux");
     }
 }
