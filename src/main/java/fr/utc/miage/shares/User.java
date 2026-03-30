@@ -28,7 +28,7 @@ public class User {
     public User(String name, String firstName) {
         this.name = name;
         this.firstName = firstName;
-        this.portefeuille = new Portefeuille(name + " " + firstName, "Standard", Map.of());
+        this.portefeuille = new Portefeuille(name + " " + firstName, "Standard", new HashMap<>());
     }
 
     public String getName() {
