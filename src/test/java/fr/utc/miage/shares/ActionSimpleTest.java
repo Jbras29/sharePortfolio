@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Map;
 
@@ -29,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 
 
-public class ActionSimpleTest {
+class ActionSimpleTest {
 
     private static final String LIBELLE = "AXA";
     private static final float PRIX_VALIDE = 150.5f;
@@ -55,7 +54,6 @@ public class ActionSimpleTest {
         ActionSimple action = new ActionSimple(LIBELLE);
         Jour jour = new Jour(2026, 3, 30);
 
-        // Test de la branche 'if (v < 0)' -> Branch Coverage
         /* On vérifie qu'un prix négatif déclenche une IllegalArgumentException */
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             action.enregistrerCours(jour, PRIX_NEGATIF);

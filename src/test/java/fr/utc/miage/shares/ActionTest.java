@@ -115,8 +115,8 @@ class ActionTest {
         final Action actionSimple = new ActionSimple(FOO_SHARE1);
         final Action actionCompose = new ActionCompose(FOO_SHARE2);
 
-        Assertions.assertDoesNotThrow(() -> actionSimple.simpleOuComposee(), "Method should not throw an exception for ActionSimple");
-        Assertions.assertDoesNotThrow(() -> actionCompose.simpleOuComposee(), "Method should not throw an exception for ActionCompose");
+        Assertions.assertDoesNotThrow(actionSimple::simpleOuComposee, "Method should not throw an exception for ActionSimple");
+        Assertions.assertDoesNotThrow(actionCompose::simpleOuComposee, "Method should not throw an exception for ActionCompose");
     }
 
     @Test

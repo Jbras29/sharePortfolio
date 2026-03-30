@@ -37,7 +37,7 @@ public class Administrateur extends User {
     public void publierAction(Action action) {
         if (!catalogue.contains(action)) {
             catalogue.add(action);
-            LOGGER.log(Level.INFO, "{0}' publiée avec succès.", action.getLibelle());
+            LOGGER.log(Level.INFO, "Action ''{0}'' publiée avec succès.", action.getLibelle());
         } else {
             LOGGER.warning("Cette action est déjà disponible sur la plateforme.");
         }
@@ -45,7 +45,7 @@ public class Administrateur extends User {
 
     public void supprimerAction(Action action) {
         if (catalogue.remove(action)) {
-            LOGGER.log(Level.INFO, "{0}' supprimée avec succès.", action.getLibelle());
+            LOGGER.log(Level.INFO, "Action ''{0}'' supprimée avec succès.", action.getLibelle());
         } else {
             throw new IllegalArgumentException("Impossible de supprimer l'action '" + action.getLibelle() + "' : elle n'existe pas dans le catalogue.");
         }

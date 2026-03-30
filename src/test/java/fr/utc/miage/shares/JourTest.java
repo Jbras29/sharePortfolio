@@ -70,7 +70,7 @@ class JourTest {
                 () -> assertEquals(jour1, jour1, "Un objet doit être égal à lui-même"),
                 () -> assertEquals(jour1, jour2, "Deux objets avec la même date doivent être égaux"),
                 () -> assertNotEquals(jour1, jourDiff, "Deux dates différentes ne doivent pas être égales"),
-                () -> assertNotEquals(jour1, null, "Un objet ne peut pas être égal à null"),
+                () -> assertNotEquals(null, jour1, "Un objet ne peut pas être égal à null"),
                 () -> assertEquals(jour1.hashCode(), jour2.hashCode(), "Le hashcode doit être identique pour deux dates égales")
         );
     }
