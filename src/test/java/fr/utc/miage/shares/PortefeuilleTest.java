@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -226,4 +227,26 @@ class PortefeuilleTest {
         assertTrue(pourcentages.containsKey(actionD));
         assertTrue(pourcentages.containsKey(actionE));
     }
+
+    @Test
+    void testAcheterActionWithCorrectInitialActions() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        ActionSimple actionB = new ActionSimple("ActionB");
+        ActionSimple actionC = new ActionSimple("ActionC");
+
+        LocalDate currentDate = LocalDate.now();
+        Jour jour = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
+        Administrateur administrateur = new Administrateur(null, null);
+        administrateur.updateActionSimpleCours(actionA, jour, 10);
+        administrateur.updateActionSimpleCours(actionB, jour, 20);
+        administrateur.updateActionSimpleCours(actionC, jour, 30);
+
+        portefeuille.acheterAction(actionA, 2);
+        portefeuille.acheterAction(actionB, 3);
+        portefeuille.acheterAction(actionC, 4);
+
+        assertEquals(20f, portefeuille.getMapActionsInitial().get(actionA));
+        assertEquals(60f, portefeuille.getMapActionsInitial().get(actionB));
+        assertEquals(120f, portefeuille.getMapActionsInitial().get(actionC));
     }
+}

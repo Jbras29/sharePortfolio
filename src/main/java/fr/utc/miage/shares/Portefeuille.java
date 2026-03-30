@@ -210,4 +210,12 @@ public class Portefeuille {
         return true;
     }
 
+    public Map<Action, Float> getMapActionsInitial() {
+        return mapActionsInitial;
+    }
+
+    public void setMapActionsInitial(Map<Action, Float> mapActionsInitial) {
+        this.mapActionsInitial = mapActionsInitial;
+    }
+
 }
