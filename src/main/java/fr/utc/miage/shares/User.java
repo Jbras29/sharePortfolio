@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 public class User {
 
     private String name;
@@ -92,6 +93,41 @@ public class User {
         throw new IllegalArgumentException("L'action ne peut pas être nulle.");
     }
     return this.favoris.add(action); 
+    }
+
+
+    // Trouver une action par son nom
+    public Optional<Action> rechercherActionParNom(List<Action> catalogue, String libelle) {
+    if (catalogue == null || libelle == null) {
+        return Optional.empty();
+    }
+
+    for (Action action : catalogue) {
+        if (action != null && action.getLibelle() != null && action.getLibelle().equals(libelle)) {
+            return Optional.of(action);
+        }
+    }
+
+    return Optional.empty();
+}
+    public boolean supprimerFavori(Action action) {
+    if (action == null) {
+        throw new IllegalArgumentException("L'action ne peut pas être nulle.");
+    }
+    return this.favoris.remove(action);
+}
+
+public boolean estFavori(Action action) {
+    return this.favoris.contains(action);
+}
+public float getPrixAction(Action action, Jour jour){
+    if(action==null){
+        throw new IllegalArgumentException("L'action ne peut pas être nulle");
+    }
+    if(jour==null){
+        throw new IllegalArgumentException("Le jour ne peut pas être nul");
+    }
+    return action.valeur(jour);
 }
 
 // ComparaisonPortefeuille

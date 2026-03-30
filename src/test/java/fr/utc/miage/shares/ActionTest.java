@@ -110,4 +110,22 @@ class ActionTest {
         }
     }
 
+    @Test 
+    void testSimpleouComposee() {
+        final Action actionSimple = new ActionSimple(FOO_SHARE1);
+        final Action actionCompose = new ActionCompose(FOO_SHARE2);
+
+        Assertions.assertDoesNotThrow(actionSimple::simpleOuComposee, "Method should not throw an exception for ActionSimple");
+        Assertions.assertDoesNotThrow(actionCompose::simpleOuComposee, "Method should not throw an exception for ActionCompose");
+    }
+
+    @Test
+    void testSetTypeAction() {
+        final Action action = new ActionSimple(FOO_SHARE1);
+        Assertions.assertEquals(TypeAction.SIMPLE, action.getTypeAction(), "Initial type should be SIMPLE");
+
+        action.setTypeAction(TypeAction.COMPOSE);
+        Assertions.assertEquals(TypeAction.COMPOSE, action.getTypeAction(), "Type should be updated to COMPOSE");
+    }
+
 }

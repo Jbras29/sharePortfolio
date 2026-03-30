@@ -17,6 +17,8 @@ package fr.utc.miage.shares;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * Permet la création d'objets Action simples.
@@ -26,6 +28,7 @@ import java.util.Map;
 public class ActionSimple extends Action {
 
     private static final float DEFAULT_ACTION_VALUE = 0.0f;
+    private static final Logger LOGGER = Logger.getLogger(ActionSimple.class.getName());
 
     /* Dictionnaire stockant les cours par jour */
     private final Map<Jour, Float> mapCours;
@@ -49,7 +52,6 @@ public class ActionSimple extends Action {
      * @param v la nouvelle valeur du cours
      */
     public void enregistrerCours(final Jour j, final float v) {
-        // Suppression de la condition 'if (!containsKey)' pour permettre la modification
         if (v < 0) {
             throw new IllegalArgumentException("Le cours ne peut pas être négatif.");
         }
@@ -69,4 +71,62 @@ public class ActionSimple extends Action {
         // Utilisation de getOrDefault pour simplifier le code
         return this.mapCours.getOrDefault(j, DEFAULT_ACTION_VALUE);
     }
+
+    public Map<Jour, Float> getHistoriqueCours(Jour dateDebut, Jour dateFin) {
+        /* Utilisation d'un TreeMap pour garantir que les dates sont dans l'ordre chronologique */
+        Map<Jour, Float> historique = new TreeMap<>();
+
+        /* Parcours de tous les cours enregistrés pour cette action */
+        for (Map.Entry<Jour, Float> entry : this.mapCours.entrySet()) {
+            Jour j = entry.getKey();
+
+            /* Vérification si le jour se situe dans l'intervalle [dateDebut, dateFin] */
+            if (j.compareTo(dateDebut) >= 0 && j.compareTo(dateFin) <= 0) {
+                historique.put(j, entry.getValue());
+            }
+        }
+
+        return historique;
+    }
+
+    public void afficherAnalyseCourbe(Jour debut, Jour fin) {
+        Map<Jour, Float> points = getHistoriqueCours(debut, fin);
+
+        LOGGER.info("--- Analyse de l'action : " + this.getLibelle() + " ---");
+
+        /* On parcourt les points triés pour simuler l'évolution */
+        points.forEach((jour, valeur) -> {
+            /* On affiche la date et une barre proportionnelle pour "voir" la courbe */
+            String barre = "I".repeat((int) (valeur / 10)); // Simple représentation visuelle
+            LOGGER.info(String.format("%10s | %8.2f€ | %s", jour.toString(), valeur, barre));
+        });
+    }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((mapCours == null) ? 0 : mapCours.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ActionSimple other = (ActionSimple) obj;
+        if (mapCours == null) {
+            if (other.mapCours != null)
+                return false;
+        } else if (!mapCours.equals(other.mapCours))
+            return false;
+        return true;
+    }
+
+    
 }

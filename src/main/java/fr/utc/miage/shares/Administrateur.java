@@ -21,9 +21,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Administrateur extends User {
 
+    private static final Logger LOGGER = Logger.getLogger(Administrateur.class.getName());
     private List<Action> catalogue;
 
     public Administrateur(String name, String firstName) {
@@ -34,15 +37,15 @@ public class Administrateur extends User {
     public void publierAction(Action action) {
         if (!catalogue.contains(action)) {
             catalogue.add(action);
-            System.out.println("Action '" + action.getLibelle() + "' publiée avec succès.");
+            LOGGER.log(Level.INFO, "Action ''{0}'' publiée avec succès.", action.getLibelle());
         } else {
-            System.out.println("Cette action est déjà disponible sur la plateforme.");
+            LOGGER.warning("Cette action est déjà disponible sur la plateforme.");
         }
     }
 
     public void supprimerAction(Action action) {
         if (catalogue.remove(action)) {
-            System.out.println("Action '" + action.getLibelle() + "' supprimée avec succès.");
+            LOGGER.log(Level.INFO, "Action ''{0}'' supprimée avec succès.", action.getLibelle());
         } else {
             throw new IllegalArgumentException("Impossible de supprimer l'action '" + action.getLibelle() + "' : elle n'existe pas dans le catalogue.");
         }
@@ -80,27 +83,39 @@ public class Administrateur extends User {
 
     public void ajouterPourcentageActionComposee (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
         if (actionCompose.addAction(actionSimple, pourcentage)) {
-            System.out.println("Action '" + actionSimple.getLibelle() + "' ajoutée à l'action composée '" + actionCompose.getLibelle() + "' avec un pourcentage de " + pourcentage);
+            LOGGER.log(Level.INFO,
+                    "Action ''{0}'' ajoutée à l''action composée ''{1}'' avec un pourcentage de {2}",
+                    new Object[]{actionSimple.getLibelle(), actionCompose.getLibelle(), pourcentage});
         } else {
-            System.out.println("Impossible d'ajouter l'action '" + actionSimple.getLibelle() + "' à l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez le pourcentage ou si l'action est déjà présente.");
+            LOGGER.log(Level.WARNING,
+                    "Impossible d''ajouter l''action ''{0}'' à l''action composée ''{1}''. Vérifiez le pourcentage ou si l''action est déjà présente.",
+                    new Object[]{actionSimple.getLibelle(), actionCompose.getLibelle()});
             throw new IllegalArgumentException("Proportion must be between 0 and 1 and action must be valid and not already exist in the composition.");
         }
     }
 
     public void updatePourcentageActionComposee (ActionCompose actionCompose, ActionSimple actionSimple, float pourcentage) {
         if (actionCompose.updateProportion(actionSimple, pourcentage)) {
-            System.out.println("Pourcentage de l'action '" + actionSimple.getLibelle() + "' dans l'action composée '" + actionCompose.getLibelle() + "' mis à jour à " + pourcentage);
+            LOGGER.log(Level.INFO,
+                    "Pourcentage de l''action ''{0}'' dans l''action composée ''{1}'' mis à jour à {2}",
+                    new Object[]{actionSimple.getLibelle(), actionCompose.getLibelle(), pourcentage});
         } else {
-            System.out.println("Impossible de mettre à jour le pourcentage de l'action '" + actionSimple.getLibelle() + "' dans l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez le pourcentage ou si l'action est déjà présente.");
+            LOGGER.log(Level.WARNING,
+                    "Impossible de mettre à jour le pourcentage de l''action ''{0}'' dans l''action composée ''{1}''. Vérifiez le pourcentage ou si l''action est déjà présente.",
+                    new Object[]{actionSimple.getLibelle(), actionCompose.getLibelle()});
             throw new IllegalArgumentException("Proportion must be between 0 and 1 and action must be valid and already exist in the composition.");
         }
     }
 
     public void supprimerActionComposee (ActionCompose actionCompose, ActionSimple actionSimple) {
         if (actionCompose.removeAction(actionSimple)) {
-            System.out.println("Action '" + actionSimple.getLibelle() + "' supprimée de l'action composée '" + actionCompose.getLibelle() + "'.");
+            LOGGER.log(Level.INFO,
+                    "Action ''{0}'' supprimée de l''action composée ''{1}''.",
+                    new Object[]{actionSimple.getLibelle(), actionCompose.getLibelle()});
         } else {
-            System.out.println("Impossible de supprimer l'action '" + actionSimple.getLibelle() + "' de l'action composée '" + actionCompose.getLibelle() + "'. Vérifiez si l'action est présente dans la composition.");
+            LOGGER.log(Level.WARNING,
+                    "Impossible de supprimer l''action ''{0}'' de l''action composée ''{1}''. Vérifiez si l''action est présente dans la composition.",
+                    new Object[]{actionSimple.getLibelle(), actionCompose.getLibelle()});
             throw new IllegalArgumentException("Action must be valid and already exist in the composition.");
         }
     }

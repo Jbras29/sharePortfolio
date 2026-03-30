@@ -16,7 +16,7 @@
 package fr.utc.miage.shares;
 
 import java.util.Objects;
-import fr.utc.miage.shares.TypeAction;
+import java.util.logging.Logger;
 
 /**
  * Cette classe définit le comportement commun de tout objet Action.
@@ -24,6 +24,8 @@ import fr.utc.miage.shares.TypeAction;
  * @author David Navarre &lt;David.Navarre at irit.fr&gt;
  */
 public abstract class Action {
+
+    private static final Logger LOGGER = Logger.getLogger(Action.class.getName());
 
     /* Le libellé de l'action (non-final pour permettre la modification) */
     private String libelle;
@@ -94,6 +96,19 @@ public abstract class Action {
     }
 
     public TypeAction getTypeAction() {
+        return typeAction;
+    }
+
+    protected void setTypeAction(TypeAction typeAction) {
+        this.typeAction = typeAction;
+    }
+
+    public TypeAction simpleOuComposee() {
+        if (typeAction == TypeAction.SIMPLE) {
+            LOGGER.info("L'action '" + getLibelle() + "' est une action simple.");
+        } else if (typeAction == TypeAction.COMPOSE) {
+            LOGGER.info("L'action '" + getLibelle() + "' est une action composée.");
+        }
         return typeAction;
     }
 }

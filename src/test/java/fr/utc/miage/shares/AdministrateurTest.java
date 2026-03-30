@@ -17,7 +17,6 @@
 
 package fr.utc.miage.shares;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,7 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AdministrateurTest {
+class AdministrateurTest {
 
     @Test
     void testGetName() {
@@ -219,7 +218,7 @@ public class AdministrateurTest {
      * Test de la modification du libellé et de la cohérence du Set.
      */
     @Test
-    public void testUpdateActionLibelle() {
+    void testUpdateActionLibelle() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("AncienNom");
@@ -246,7 +245,7 @@ public class AdministrateurTest {
     }
 
     @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionsWithoutCourse() {
+    void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionsWithoutCourse() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action1 = new ActionSimple("Action1");
@@ -265,7 +264,7 @@ public class AdministrateurTest {
     }
 
     @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionWithoutCourseWhenOtherHasCourse() {
+    void testRetrieveActionsWithNoCoursCurrentDate_IncludesActionWithoutCourseWhenOtherHasCourse() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action1 = new ActionSimple("Action1");
@@ -288,7 +287,7 @@ public class AdministrateurTest {
     }
 
     @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_DoesNotIncludeActionWithCourse() {
+    void testRetrieveActionsWithNoCoursCurrentDate_DoesNotIncludeActionWithCourse() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
         ActionSimple action1 = new ActionSimple("Action1");
@@ -309,7 +308,7 @@ public class AdministrateurTest {
     }
 
     @Test
-    public void testRetrieveActionsWithNoCoursCurrentDate_WithEmptyCatalogue() {
+    void testRetrieveActionsWithNoCoursCurrentDate_WithEmptyCatalogue() {
         // Initialisation locale
         Administrateur admin = new Administrateur("Doe", "John");
 

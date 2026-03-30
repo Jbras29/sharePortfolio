@@ -17,10 +17,14 @@ package fr.utc.miage.shares;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -109,7 +113,51 @@ class PortefeuilleTest {
         });
     }
 
+    @Test
+    void testAcheterActionActionNulle() {
+        // Initialisation du portefeuille
+
+
+        // On vérifie que l'appel avec 'null' lève bien une IllegalArgumentException
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            portefeuille.acheterAction(null, 10);
+        });
+
+        // Vérification que le message d'erreur est exactement celui attendu
+        assertEquals("L'action à acheter ne peut pas être nulle.", exception.getMessage());
+    }
+
+
+
     // --- TESTS D'AFFICHAGE ET SORTIE ---
+    @Test
+    void testAfficherPourcentagePortefeuilleValeurZero() {
+        // Initialisation du portefeuille (supposé vide au départ)
+
+        Jour jourJ = new Jour(2026, 3, 30);
+
+        /* * CAS 1 : Portefeuille vide.
+         * La boucle ne s'exécute pas, valeurTotale reste à 0.
+         */
+        Map<Action, Double> resultVide = portefeuille.afficherPourcentagePortefeuille(jourJ);
+
+        // Vérification : La map doit être vide
+        assertTrue(resultVide.isEmpty(), "Le résultat doit être une map vide si le portefeuille est vide.");
+        assertEquals(0, resultVide.size(), "La taille doit être 0.");
+
+        /* * CAS 2 : Portefeuille avec une action dont la valeur est 0.
+         * On ajoute une action mais on s'assure que son prix ce jour-là est 0.
+         */
+        ActionSimple actionGratuite = new ActionSimple("ActionGratuite");
+        actionGratuite.enregistrerCours(jourJ, 0f); // Prix à 0
+        portefeuille.acheterAction(actionGratuite, 10); // Quantité 10, mais prix 0 -> Total 0
+
+        Map<Action, Double> resultValeurNulle = portefeuille.afficherPourcentagePortefeuille(jourJ);
+
+        // Vérification : Même avec une action, si le total est 0, on doit retourner une map vide
+        assertTrue(resultValeurNulle.isEmpty(), "Le résultat doit être vide si la valeur totale du portefeuille est 0.");
+    }
+
 
     @Test
     void testAfficherPortefeuilleVide() {
@@ -126,25 +174,50 @@ class PortefeuilleTest {
 
     @Test
     void testAfficherDetailsPortefeuille() {
-        // Capture de la sortie console
-        PrintStream originalOut = System.out;
-        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStreamCaptor));
+        Logger logger = Logger.getLogger(Portefeuille.class.getName());
+        StringBuilder logsCaptor = new StringBuilder();
+        Handler testHandler = new Handler() {
+            @Override
+            public void publish(LogRecord recordT) {
+                if (recordT.getParameters() != null) {
+                    logsCaptor.append(MessageFormat.format(recordT.getMessage(), recordT.getParameters())).append("\n");
+                } else {
+                    logsCaptor.append(recordT.getMessage()).append("\n");
+                }
+            }
+
+            @Override
+            public void flush() {
+                // No-op for in-memory capture
+            }
+
+            @Override
+            public void close() {
+                // No-op for in-memory capture
+            }
+        };
+
+        boolean originalUseParentHandlers = logger.getUseParentHandlers();
+        Level originalLevel = logger.getLevel();
+        logger.setUseParentHandlers(false);
+        logger.setLevel(Level.INFO);
+        logger.addHandler(testHandler);
 
         try {
             portefeuille.acheterAction(actionApple, 10);
             Jour aujourdHui = new Jour(2024, 1,10);
             portefeuille.afficherDetailsPortefeuille(aujourdHui);
 
-            String sortieConsole = outputStreamCaptor.toString();
+            String sortieLogs = logsCaptor.toString();
 
-            assertTrue(sortieConsole.contains("Mon Portefeuille Test"));
-            assertTrue(sortieConsole.contains("Apple"));
-            assertTrue(sortieConsole.contains("10"));
-            assertTrue(sortieConsole.contains("VALEUR TOTALE"));
+            assertTrue(sortieLogs.contains("Mon Portefeuille Test"));
+            assertTrue(sortieLogs.contains("Apple"));
+            assertTrue(sortieLogs.contains("10"));
+            assertTrue(sortieLogs.contains("VALEUR TOTALE"));
         } finally {
-            // Toujours remettre le flux standard
-            System.setOut(originalOut);
+            logger.removeHandler(testHandler);
+            logger.setUseParentHandlers(originalUseParentHandlers);
+            logger.setLevel(originalLevel);
         }
     }
 
@@ -226,4 +299,68 @@ class PortefeuilleTest {
         assertTrue(pourcentages.containsKey(actionD));
         assertTrue(pourcentages.containsKey(actionE));
     }
+
+    @Test
+    void getActionsSortedByName_portefeuilleVide_retourneListeVide() {
+        Portefeuille portefeuilleTest = new Portefeuille("Test", "Standard", new HashMap<>());
+
+        List<Action> result = portefeuilleTest.getActionsSortedByName();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
+
+    @Test
+    void getActionsSortedByName_plusieursActions_retourneListeTriee() {
+        Portefeuille portefeuilleTest = new Portefeuille("Test", "Standard", new HashMap<>());
+        ActionSimple actionC = new ActionSimple("Google");
+        ActionSimple actionA = new ActionSimple("Apple");
+        ActionSimple actionB = new ActionSimple("Facebook");
+        portefeuilleTest.acheterAction(actionC, 1);
+        portefeuilleTest.acheterAction(actionA, 1);
+        portefeuilleTest.acheterAction(actionB, 1);
+
+        List<Action> result = portefeuilleTest.getActionsSortedByName();
+
+        assertEquals("Apple", result.get(0).getLibelle());
+        assertEquals("Facebook", result.get(1).getLibelle());
+        assertEquals("Google", result.get(2).getLibelle());
+    }
+
+    @Test
+    void getActionsSortedByName_uneAction_retourneListeUneAction() {
+        Portefeuille portefeuilleTest = new Portefeuille("Test", "Standard", new HashMap<>());
+        ActionSimple action = new ActionSimple("Apple");
+        portefeuilleTest.acheterAction(action, 3);
+
+        List<Action> result = portefeuilleTest.getActionsSortedByName();
+
+        assertEquals(1, result.size());
+        assertEquals("Apple", result.get(0).getLibelle());
+    }
+
+    @Test
+    void testCalculerValeurTotale() {
+        Jour j = new Jour(2026, 3, 30);
+
+        ActionSimple a1 = new ActionSimple("Action A");
+        a1.enregistrerCours(j, 100f);
+
+        ActionSimple a2 = new ActionSimple("Action B");
+        a2.enregistrerCours(j, 50f);
+
+        /* Achat d'actions : 10*100 + 20*50 = 1000 + 1000 = 2000 */
+        portefeuille.acheterAction(a1, 10);
+        portefeuille.acheterAction(a2, 20);
+
+
+        assertEquals(2000f, portefeuille.calculerValeurTotale(j), "Le capital total calculé est incorrect.");
+    }
+
+    @Test
+    void testCalculerValeurTotaleAvecJourNul() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            portefeuille.calculerValeurTotale(null);
+        }, "Une exception devrait être levée si le jour est nul.");
+    }
+}
