@@ -29,19 +29,10 @@ public class Administrateur extends User {
         this.catalogue = new ArrayList<>();
     }
 
-    public void publierActionSimple(ActionSimple actionSimple) {
-        if (!catalogue.contains(actionSimple)) {
-            catalogue.add(actionSimple);
-            System.out.println("Action simple '" + actionSimple.getLibelle() + "' publiée avec succès.");
-        } else {
-            System.out.println("Cette action est déjà disponible sur la plateforme.");
-        }
-    }
-
-    public void publierActionCompose(ActionCompose actionCompose) {
-        if (!catalogue.contains(actionCompose)) {
-            catalogue.add(actionCompose);
-            System.out.println("Action composée '" + actionCompose.getLibelle() + "' publiée avec succès.");
+    public void publierAction(Action action) {
+        if (!catalogue.contains(action)) {
+            catalogue.add(action);
+            System.out.println("Action '" + action.getLibelle() + "' publiée avec succès.");
         } else {
             System.out.println("Cette action est déjà disponible sur la plateforme.");
         }

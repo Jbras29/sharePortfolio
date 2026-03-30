@@ -60,7 +60,7 @@ public class AdministrateurTest {
     void testPublierActionSimple() {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("Action France TV");
-        administrateur.publierActionSimple(action);
+        administrateur.publierAction(action);
         assertTrue(administrateur.getCatalogue().contains(action));
     }
 
@@ -68,8 +68,8 @@ public class AdministrateurTest {
     void testPublierActionSimpleDejaExistante() {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionSimple action = new ActionSimple("Action France TV");
-        administrateur.publierActionSimple(action);
-        administrateur.publierActionSimple(action);
+        administrateur.publierAction(action);
+        administrateur.publierAction(action);
         assertEquals(1, administrateur.getCatalogue().size());
     }
 
@@ -77,7 +77,7 @@ public class AdministrateurTest {
     void testPublierActionCompose() {
         Administrateur administrateur = new Administrateur("Doe", "John");
         ActionCompose actionCompose = new ActionCompose("Action Composée");
-        administrateur.publierActionCompose(actionCompose);
+        administrateur.publierAction(actionCompose);
         assertTrue(administrateur.getCatalogue().contains(actionCompose));
     }
 }
