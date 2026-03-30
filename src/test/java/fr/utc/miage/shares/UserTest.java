@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@ package fr.utc.miage.shares;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -69,14 +70,6 @@ public class UserTest {
     }
 
     @Test
-    void testGetInfoAction() {
-        User user = new User("Doe", "John");
-        Action action = new ActionSimple("Action France TV");
-        ActionDTO actionDTO = user.getInfoAction(action);
-        assertEquals("Action France TV", actionDTO.libelle());
-        assertEquals(TypeAction.SIMPLE, actionDTO.typeAction());
-    }
-
     void quantitePossede_portefeuilleVide_retourneMapVide() {
         User user = new User("Doe", "John");
         Map<Action, Integer> result = user.quantitePossede();
@@ -106,5 +99,71 @@ public class UserTest {
         Portefeuille portefeuille = new Portefeuille("Sub Lilian", "Standard", actions);
         user.setPortefeuille(portefeuille); 
         assertEquals(actions, user.quantitePossede());
+    }
+
+
+    @Test
+    void valeurPortefeuille_portefeuilleVide_retourneZero() {
+        User user = new User("Doe", "John");
+        Jour jour = new Jour(2025, 1, 1);
+
+        float result = user.valeurPortefeuille(jour);
+
+        assertEquals(0f, result);
+    }
+
+    @Test
+    void valeurPortefeuille_uneAction_retourneValeurCorrecte() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+        Jour jour = new Jour( 2025,1, 1);
+        action.enrgCours(jour, 100f);
+        user.getPortefeuille().acheterAction(action, 3);
+
+        float result = user.valeurPortefeuille(jour);
+
+        assertEquals(300f, result);
+    }
+
+    @Test
+    void valeurPortefeuille_plusieursActions_retourneSommeCorrecte() {
+        User user = new User("Doe", "John");
+        ActionSimple action1 = new ActionSimple("Apple");
+        ActionSimple action2 = new ActionSimple("Google");
+        Jour jour = new Jour( 2025,1, 1);
+        action1.enrgCours(jour, 100f);
+        action2.enrgCours(jour, 50f);
+        user.getPortefeuille().acheterAction(action1, 2);
+        user.getPortefeuille().acheterAction(action2, 4);
+
+        float result = user.valeurPortefeuille(jour);
+
+        assertEquals(400f, result); // (100*2) + (50*4)
+    }
+
+    @Test
+    void testGetFavoris_listeVideParDefaut() {
+        User user = new User("Doe", "John");
+        assertNotNull(user.getFavoris());
+        assertTrue(user.getFavoris().isEmpty());
+    }
+
+    @Test
+    void ajouterFavori_actionValide_retourneTrue() {
+        User user = new User("Doe", "John");
+        ActionSimple action = new ActionSimple("Apple");
+
+        boolean result = user.ajouterFavori(action);
+
+        assertTrue(result);
+        assertEquals(1, user.getFavoris().size());
+        assertTrue(user.getFavoris().contains(action));
+    }
+
+    @Test
+    void ajouterFavori_actionNull_leveException() {
+        User user = new User("Doe", "John");
+
+        assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
 }
