@@ -19,17 +19,20 @@ package fr.utc.miage.shares;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.List;
+import java.util.ArrayList;
 public class User {
 
     private String name;
     private String firstName;
     private Portefeuille portefeuille;
+    private List<Action> favoris;
 
     public User(String name, String firstName) {
         this.name = name;
         this.firstName = firstName;
         this.portefeuille = new Portefeuille(name + " " + firstName, "Standard", new HashMap<>());
+        this.favoris= new ArrayList<>();
     }
 
     public String getName() {
@@ -56,6 +59,10 @@ public class User {
         this.portefeuille = portefeuille;
     }
 
+    public List<Action> getFavoris() {
+    return favoris;
+}
+
     public Map<Action, Integer> quantitePossede() {
         Map<Action, Integer> result = new HashMap<>();
         if (portefeuille != null) {
@@ -79,4 +86,11 @@ public class User {
         }
         return valeurTotale;
     }
+
+    public boolean ajouterFavori(Action action) {
+    if (action == null) {
+        throw new IllegalArgumentException("L'action ne peut pas être nulle.");
+    }
+    return this.favoris.add(action); 
+}
 }
