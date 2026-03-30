@@ -71,4 +71,22 @@ public class User {
         Jour jourActuel = new Jour(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
         return new ActionDTO(action.getLibelle(), action.getTypeAction(), action.valeur(jourActuel));
     } 
+<<<<<<< HEAD
+=======
+
+    public float valeurPortefeuille(Jour jour) {
+    float valeurTotale = 0;              // 1. On commence à 0€
+    
+    for (Map.Entry<Action, Integer> entry : this.portefeuille.getMapActions().entrySet()) 
+    { 
+        Action action = entry.getKey();   
+        int quantite = entry.getValue();  
+        
+        valeurTotale += action.valeur(jour) * quantite;
+        
+    }
+    
+    return valeurTotale; 
+}
+>>>>>>> 3e0a860cfd5cce967a93b08ae0b1668ed64ba61f
 }
