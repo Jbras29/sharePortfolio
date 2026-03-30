@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Permet la création d'objets Action simples.
  *
- * @author David Navarre <David.Navarre at irit.fr>
+ * @author David Navarre &lt;David.Navarre at irit.fr&gt;
  */
 public class ActionSimple extends Action {
 
