@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -270,4 +271,134 @@ class PortefeuilleTest {
         assertTrue(pourcentages.containsKey(actionD));
         assertTrue(pourcentages.containsKey(actionE));
     }
+
+    @Test
+    void testAcheterActionWithCorrectInitialActions() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        ActionSimple actionB = new ActionSimple("ActionB");
+        ActionSimple actionC = new ActionSimple("ActionC");
+
+        LocalDate currentDate = LocalDate.now();
+        Jour jour = new Jour(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
+        Administrateur administrateur = new Administrateur(null, null);
+        administrateur.updateActionSimpleCours(actionA, jour, 10);
+        administrateur.updateActionSimpleCours(actionB, jour, 20);
+        administrateur.updateActionSimpleCours(actionC, jour, 30);
+
+        portefeuille.acheterAction(actionA, 2);
+        portefeuille.acheterAction(actionB, 3);
+        portefeuille.acheterAction(actionC, 4);
+
+        assertEquals(20f, portefeuille.getMapActionsInitial().get(actionA));
+        assertEquals(60f, portefeuille.getMapActionsInitial().get(actionB));
+        assertEquals(120f, portefeuille.getMapActionsInitial().get(actionC));
     }
+
+    @Test
+    void testCalculerGainEnCoursPourUneAction() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        Administrateur administrateur = new Administrateur(null, null);
+        Jour jour = new Jour(2024, 1, 10);
+
+        administrateur.updateActionSimpleCours(actionA, jour, 15);
+        portefeuille.acheterAction(actionA, 2);
+
+        Map<Action, Float> mapInitiale = new HashMap<>();
+        mapInitiale.put(actionA, 20f);
+        portefeuille.setMapActionsInitial(mapInitiale);
+
+        float gain = portefeuille.calculerGainEnCours(actionA, jour);
+        assertEquals(10f, gain);
+    }
+
+    @Test
+    void testCalculerGainTotalEnCours() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        ActionSimple actionB = new ActionSimple("ActionB");
+        Administrateur administrateur = new Administrateur(null, null);
+        Jour jour = new Jour(2024, 1, 10);
+
+        administrateur.updateActionSimpleCours(actionA, jour, 15);
+        administrateur.updateActionSimpleCours(actionB, jour, 5);
+
+        portefeuille.acheterAction(actionA, 2);
+        portefeuille.acheterAction(actionB, 4);
+
+        Map<Action, Float> mapInitiale = new HashMap<>();
+        mapInitiale.put(actionA, 20f);
+        mapInitiale.put(actionB, 30f);
+        portefeuille.setMapActionsInitial(mapInitiale);
+
+        float gainTotal = portefeuille.calculerGainTotalEnCours(jour);
+        assertEquals(0f, gainTotal);
+    }
+
+    @Test
+    void testCalculerGainEnCoursParAction() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        ActionSimple actionB = new ActionSimple("ActionB");
+        Administrateur administrateur = new Administrateur(null, null);
+        Jour jour = new Jour(2024, 1, 10);
+
+        administrateur.updateActionSimpleCours(actionA, jour, 15);
+        administrateur.updateActionSimpleCours(actionB, jour, 5);
+
+        portefeuille.acheterAction(actionA, 2);
+        portefeuille.acheterAction(actionB, 4);
+
+        Map<Action, Float> mapInitiale = new HashMap<>();
+        mapInitiale.put(actionA, 20f);
+        mapInitiale.put(actionB, 30f);
+        portefeuille.setMapActionsInitial(mapInitiale);
+
+        Map<Action, Float> gains = portefeuille.calculerGainEnCoursParAction(jour);
+        assertEquals(2, gains.size());
+        assertEquals(10f, gains.get(actionA));
+        assertEquals(-10f, gains.get(actionB));
+    }
+
+    @Test
+    void testAfficherPourcentagePortefeuilleValeurTotaleZeroRetourneMapVide() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        portefeuille.acheterAction(actionA, 3);
+        Jour jour = new Jour(2024, 1, 10);
+
+        Map<Action, Double> pourcentages = portefeuille.afficherPourcentagePortefeuille(jour);
+        assertTrue(pourcentages.isEmpty());
+    }
+
+    @Test
+    void testAcheterActionNull() {
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.acheterAction(null, 1));
+    }
+
+    @Test
+    void testCalculerGainEnCoursActionNull() {
+        Jour jour = new Jour(2024, 1, 10);
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.calculerGainEnCours(null, jour));
+    }
+
+    @Test
+    void testCalculerGainEnCoursJourNull() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        portefeuille.acheterAction(actionA, 1);
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.calculerGainEnCours(actionA, null));
+    }
+
+    @Test
+    void testCalculerGainEnCoursActionAbsenteDuPortefeuille() {
+        ActionSimple actionA = new ActionSimple("ActionA");
+        Jour jour = new Jour(2024, 1, 10);
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.calculerGainEnCours(actionA, jour));
+    }
+
+    @Test
+    void testCalculerGainTotalEnCoursJourNull() {
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.calculerGainTotalEnCours(null));
+    }
+
+    @Test
+    void testCalculerGainEnCoursParActionJourNull() {
+        assertThrows(IllegalArgumentException.class, () -> portefeuille.calculerGainEnCoursParAction(null));
+    }
+}
