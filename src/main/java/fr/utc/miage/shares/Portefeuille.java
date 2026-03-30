@@ -16,7 +16,9 @@
 
 package fr.utc.miage.shares;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Portefeuille {
@@ -185,6 +187,12 @@ public class Portefeuille {
             this.mapActions.put(action, quantiteActuelle - quantite);
         }
         return true;
+    }
+
+    public List<Action> getActionsSortedByName() {
+        return this.mapActions.keySet().stream()
+                .sorted(Comparator.comparing(Action::getLibelle))
+                .collect(java.util.stream.Collectors.toList());
     }
 
 }
