@@ -311,4 +311,29 @@ class PortefeuilleTest {
         assertEquals(1, result.size());
         assertEquals("Apple", result.get(0).getLibelle());
     }
+
+    @Test
+    void testCalculerValeurTotale() {
+        Jour j = new Jour(2026, 3, 30);
+
+        ActionSimple a1 = new ActionSimple("Action A");
+        a1.enregistrerCours(j, 100f);
+
+        ActionSimple a2 = new ActionSimple("Action B");
+        a2.enregistrerCours(j, 50f);
+
+        /* Achat d'actions : 10*100 + 20*50 = 1000 + 1000 = 2000 */
+        portefeuille.acheterAction(a1, 10);
+        portefeuille.acheterAction(a2, 20);
+
+
+        assertEquals(2000f, portefeuille.calculerValeurTotale(j), "Le capital total calculé est incorrect.");
+    }
+
+    @Test
+    void testCalculerValeurTotaleAvecJourNul() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            portefeuille.calculerValeurTotale(null);
+        }, "Une exception devrait être levée si le jour est nul.");
+    }
 }

@@ -219,4 +219,26 @@ public class Portefeuille {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    public float calculerValeurTotale(Jour jour) {
+        /* Vérification de la validité du paramètre jour */
+        if (jour == null) {
+            throw new IllegalArgumentException("Le jour de valorisation ne peut pas être nul.");
+        }
+
+        float valeurTotale = 0f;
+
+        /* Parcours de toutes les actions détenues pour sommer leur valeur actuelle */
+        for (Map.Entry<Action, Integer> entry : this.mapActions.entrySet()) {
+            Action action = entry.getKey();
+            int quantite = entry.getValue();
+
+            /* Ajout de la valeur de l'action (cours * quantité) au total */
+            valeurTotale += action.valeur(jour) * quantite;
+        }
+
+        return valeurTotale;
+    }
+
+
+
 }
