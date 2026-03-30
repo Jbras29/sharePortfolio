@@ -19,6 +19,7 @@ package fr.utc.miage.shares;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Administrateur extends User {
 
@@ -35,6 +36,29 @@ public class Administrateur extends User {
             System.out.println("Action '" + action.getLibelle() + "' publiée avec succès.");
         } else {
             System.out.println("Cette action est déjà disponible sur la plateforme.");
+        }
+    }
+
+
+    public void updateActionSimpleCours(ActionSimple as, Jour j, float v) {
+        // Logique pour mettre à jour la valeur dans l'objet ActionSimple
+        as.enregistrerCours(j, v);
+    }
+
+
+    public void updateActionLibelle(Set<Action> catalogue, Action a, String nouveauLibelle) {
+        // 1. Retirer du catalogue pour préserver l'intégrité du Hash
+        if (catalogue.contains(a)) {
+            catalogue.remove(a);
+
+            // 2. Changer le nom via le setter (assurez-vous d'avoir ajouté setLibelle dans Action)
+            a.setLibelle(nouveauLibelle);
+
+            // 3. Réinsérer avec le nouveau hashCode
+            catalogue.add(a);
+        } else {
+            // Si l'action n'est pas dans ce catalogue, on la modifie simplement
+            a.setLibelle(nouveauLibelle);
         }
     }
 

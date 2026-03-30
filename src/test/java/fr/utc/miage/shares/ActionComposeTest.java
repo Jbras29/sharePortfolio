@@ -137,7 +137,7 @@ class ActionComposeTest {
         assertTrue(actionCompose.addAction(action1, 0.5f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
 
-        Jour jour = new Jour(2025, 23);
+        Jour jour = new Jour(2025, 3,23);
         float expectedValue = (action1.valeur(jour) * 0.5f) + (action2.valeur(jour) * 0.5f);
 
         assertEquals(expectedValue, actionCompose.valeur(jour), 0.0001);
@@ -152,7 +152,7 @@ class ActionComposeTest {
         assertTrue(actionCompose.addAction(action1, 0.1f));
         assertTrue(actionCompose.addAction(action2, 0.5f));
 
-        Jour jour = new Jour(2025, 23);
+        Jour jour = new Jour(2025, 3,23);
         assertThrows(IllegalStateException.class, () -> actionCompose.valeur(jour));
     }
 
