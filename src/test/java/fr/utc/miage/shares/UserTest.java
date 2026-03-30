@@ -76,7 +76,7 @@ public class UserTest {
         assertEquals("Action France TV", actionDTO.libelle());
         assertEquals(TypeAction.SIMPLE, actionDTO.typeAction());
     }
-}
+
     void quantitePossede_portefeuilleVide_retourneMapVide() {
         User user = new User("Doe", "John");
         Map<Action, Integer> result = user.quantitePossede();
