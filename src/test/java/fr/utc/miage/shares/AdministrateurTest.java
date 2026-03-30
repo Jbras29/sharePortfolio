@@ -19,6 +19,8 @@ package fr.utc.miage.shares;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -79,5 +81,32 @@ public class AdministrateurTest {
         ActionCompose actionCompose = new ActionCompose("Action Composée");
         administrateur.publierAction(actionCompose);
         assertTrue(administrateur.getCatalogue().contains(actionCompose));
+    }
+
+    @Test
+    void testSupprimerAction() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("Action France TV");
+        administrateur.publierAction(action);
+        administrateur.supprimerAction(action);
+        assertFalse(administrateur.getCatalogue().contains(action));
+    }
+
+    @Test
+    void testAnnulerSuppressionAction() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("Action France TV");
+        administrateur.publierAction(action);
+        administrateur.supprimerAction(action);
+        assertFalse(administrateur.getCatalogue().contains(action));
+        administrateur.publierAction(action);
+        assertTrue(administrateur.getCatalogue().contains(action));
+    }
+
+    @Test
+    void testSupprimerActionInexistante() {
+        Administrateur administrateur = new Administrateur("Doe", "John");
+        ActionSimple action = new ActionSimple("Action France TV");
+        assertThrows(IllegalArgumentException.class, () -> administrateur.supprimerAction(action));
     }
 }

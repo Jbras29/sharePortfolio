@@ -38,6 +38,16 @@ public class Administrateur extends User {
         }
     }
 
+    public void supprimerAction(Action action) {
+        if (catalogue.contains(action)) {
+            catalogue.remove(action);
+            System.out.println("Action '" + action.getLibelle() + "' supprimée avec succès.");
+        } else {
+            System.out.println("Cette action n'existe pas dans le catalogue.");
+            throw new IllegalArgumentException("Action not found in catalogue");
+        }
+    }
+
     public List<Action> getCatalogue() {
         return catalogue;
     }
