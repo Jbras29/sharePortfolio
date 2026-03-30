@@ -86,6 +86,18 @@ class ActionTest {
         Assertions.assertDoesNotThrow(action::hashCode, "hashcode must always provide a value");
     }
 
+    @Test
+    void testTypeActionSimple() {
+        final Action action = new ActionSimple(FOO_SHARE1);
+        Assertions.assertEquals(TypeAction.SIMPLE, action.getTypeAction());
+    }
+
+    @Test
+    void testTypeActionCompose() {
+        final Action action = new ActionCompose(FOO_SHARE1);
+        Assertions.assertEquals(TypeAction.COMPOSE, action.getTypeAction());
+    }
+
     private static class ActionImpl extends Action {
 
         public ActionImpl(final String aLabel) {
