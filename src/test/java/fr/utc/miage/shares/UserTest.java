@@ -16,6 +16,7 @@
 package fr.utc.miage.shares;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -166,4 +167,66 @@ public class UserTest {
 
         assertThrows(IllegalArgumentException.class, () -> user.ajouterFavori(null));
     }
+ 
+   @Test
+void supprimerFavori_actionPresente_retourneTrue() {
+    User user = new User("Sb", "Li");
+    ActionSimple action = new ActionSimple("Apple");
+    user.ajouterFavori(action);
+
+    boolean result = user.supprimerFavori(action);
+
+    assertTrue(result);
+    assertEquals(0, user.getFavoris().size());
+    assertFalse(user.getFavoris().contains(action));
+}
+
+@Test
+void supprimerFavori_actionAbsente_retourneFalse() {
+    User user = new User("Sb", "Li");
+    ActionSimple action = new ActionSimple("Apple");
+
+    boolean result = user.supprimerFavori(action);
+
+    assertFalse(result);
+    assertEquals(0, user.getFavoris().size());
+}
+
+@Test
+void supprimerFavori_actionNull_leveException() {
+    User user = new User("Doe", "John");
+
+    assertThrows(IllegalArgumentException.class, () -> user.supprimerFavori(null));
+}
+
+@Test
+void estFavori_actionPresente_retourneTrue() {
+    User user = new User("SB", "LIL");
+    ActionSimple action = new ActionSimple("Apple");
+    user.ajouterFavori(action);
+
+    boolean result = user.estFavori(action);
+
+    assertTrue(result);
+    assertEquals(1, user.getFavoris().size());
+}
+@Test
+void estFavori_actionAbsente_retourneFalse() {
+    User user = new User("SB", "LIL");
+    ActionSimple action = new ActionSimple("Apple");
+
+    boolean result = user.estFavori(action);
+
+    assertFalse(result);
+    assertEquals(0, user.getFavoris().size());
+}
+
+@Test 
+void est_favori_actionNull(){
+    User user = new User("SB", "lil");
+        boolean result=user.estFavori(null);
+        assertFalse(result);
+    
+}
+
 }
