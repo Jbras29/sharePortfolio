@@ -20,79 +20,71 @@ package fr.utc.miage.shares;
  *
  * @author David Navarre &lt;David.Navarre@ut-capitole.fr&gt;
  */
-public class Jour {
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
+/**
+ * Cette classe décrit un jour précis en utilisant LocalDate pour gérer la logique temporelle.
+ */
+public final class Jour implements Comparable<Jour> {
+
+    /* Utilisation de la bibliothèque standard Java pour gérer les dates */
+    private final LocalDate date;
 
     /**
-     * Year attribute.
+     * Constructeur à partir de l'année, du mois et du jour du mois.
+     * Exemple : new Jour(2026, 3, 30)
      */
-    private final int year;
-    /**
-     * Day attribute.
-     */
-    private final int day;
-
-    /**
-     * Builds a Jour object from one year and one day.
-     *
-     * @param aYear the year of the jour &gt; 0
-     * @param aDay  theday of the jour &gt; 0
-     */
-    public Jour(final int aYear, final int aDay) {
-        if (0 >= aDay) {
-            throw new IllegalArgumentException("Day must be strictly more than 0");
-        }
-        if (0 >= aYear) {
-            throw new IllegalArgumentException("Year must be strictly more than 0");
-        }
-        this.year = aYear;
-        this.day = aDay;
+    public Jour(int year, int month, int dayOfMonth) {
+        // LocalDate.of gère automatiquement les erreurs (ex: 31 février)
+        this.date = LocalDate.of(year, month, dayOfMonth);
     }
 
     /**
-     * Returns the year of the jour.
-     *
-     * @return the year property
+     * Retourne le mois sous forme d'entier (1-12).
      */
+    public int getMonth() {
+        return date.getMonthValue();
+    }
+
     public int getYear() {
-        return year;
+        return date.getYear();
+    }
+
+    public int getDayOfMonth() {
+        return date.getDayOfMonth();
     }
 
     /**
-     * Returns the day of the jour.
-     *
-     * @return the day property
+     * Retourne le numéro du jour dans l'année (ce que vous aviez avant).
      */
-    public int getDay() {
-        return day;
+    public int getDayOfYear() {
+        return date.getDayOfYear();
+    }
+
+    @Override
+    public int compareTo(Jour o) {
+        return this.date.compareTo(o.date);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jour jour = (Jour) o;
+        return Objects.equals(date, jour.date);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + year;
-        result = prime * result + day;
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Jour other = (Jour) obj;
-        return (year == other.year) && (day == other.day);
+        return Objects.hash(date);
     }
 
     @Override
     public String toString() {
-        return "Jour [year=" + year + ", day=" + day + "]";
+        // Formatage lisible : "30/03/2026"
+        return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
-
 }
