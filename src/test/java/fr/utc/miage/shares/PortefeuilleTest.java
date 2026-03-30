@@ -17,7 +17,6 @@ package fr.utc.miage.shares;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,8 +177,8 @@ class PortefeuilleTest {
         StringBuilder logsCaptor = new StringBuilder();
         Handler testHandler = new Handler() {
             @Override
-            public void publish(LogRecord record) {
-                logsCaptor.append(record.getMessage()).append("\n");
+            public void publish(LogRecord recordT) {
+                logsCaptor.append(recordT.getMessage()).append("\n");
             }
 
             @Override
@@ -298,9 +297,9 @@ class PortefeuilleTest {
 
     @Test
     void getActionsSortedByName_portefeuilleVide_retourneListeVide() {
-        Portefeuille portefeuille = new Portefeuille("Test", "Standard", new HashMap<>());
+        Portefeuille portefeuilleTest = new Portefeuille("Test", "Standard", new HashMap<>());
 
-        List<Action> result = portefeuille.getActionsSortedByName();
+        List<Action> result = portefeuilleTest.getActionsSortedByName();
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -308,15 +307,15 @@ class PortefeuilleTest {
 
     @Test
     void getActionsSortedByName_plusieursActions_retourneListeTriee() {
-        Portefeuille portefeuille = new Portefeuille("Test", "Standard", new HashMap<>());
+        Portefeuille portefeuilleTest = new Portefeuille("Test", "Standard", new HashMap<>());
         ActionSimple actionC = new ActionSimple("Google");
         ActionSimple actionA = new ActionSimple("Apple");
         ActionSimple actionB = new ActionSimple("Facebook");
-        portefeuille.acheterAction(actionC, 1);
-        portefeuille.acheterAction(actionA, 1);
-        portefeuille.acheterAction(actionB, 1);
+        portefeuilleTest.acheterAction(actionC, 1);
+        portefeuilleTest.acheterAction(actionA, 1);
+        portefeuilleTest.acheterAction(actionB, 1);
 
-        List<Action> result = portefeuille.getActionsSortedByName();
+        List<Action> result = portefeuilleTest.getActionsSortedByName();
 
         assertEquals("Apple", result.get(0).getLibelle());
         assertEquals("Facebook", result.get(1).getLibelle());
@@ -325,11 +324,11 @@ class PortefeuilleTest {
 
     @Test
     void getActionsSortedByName_uneAction_retourneListeUneAction() {
-        Portefeuille portefeuille = new Portefeuille("Test", "Standard", new HashMap<>());
+        Portefeuille portefeuilleTest = new Portefeuille("Test", "Standard", new HashMap<>());
         ActionSimple action = new ActionSimple("Apple");
-        portefeuille.acheterAction(action, 3);
+        portefeuilleTest.acheterAction(action, 3);
 
-        List<Action> result = portefeuille.getActionsSortedByName();
+        List<Action> result = portefeuilleTest.getActionsSortedByName();
 
         assertEquals(1, result.size());
         assertEquals("Apple", result.get(0).getLibelle());

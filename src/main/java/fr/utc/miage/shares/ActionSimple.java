@@ -18,6 +18,7 @@ package fr.utc.miage.shares;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * Permet la création d'objets Action simples.
@@ -27,6 +28,7 @@ import java.util.TreeMap;
 public class ActionSimple extends Action {
 
     private static final float DEFAULT_ACTION_VALUE = 0.0f;
+    private static final Logger LOGGER = Logger.getLogger(ActionSimple.class.getName());
 
     /* Dictionnaire stockant les cours par jour */
     private final Map<Jour, Float> mapCours;
@@ -90,13 +92,13 @@ public class ActionSimple extends Action {
     public void afficherAnalyseCourbe(Jour debut, Jour fin) {
         Map<Jour, Float> points = getHistoriqueCours(debut, fin);
 
-        System.out.println("--- Analyse de l'action : " + this.getLibelle() + " ---");
+        LOGGER.info("--- Analyse de l'action : " + this.getLibelle() + " ---");
 
         /* On parcourt les points triés pour simuler l'évolution */
         points.forEach((jour, valeur) -> {
             /* On affiche la date et une barre proportionnelle pour "voir" la courbe */
             String barre = "I".repeat((int) (valeur / 10)); // Simple représentation visuelle
-            System.out.printf("%10s | %8.2f€ | %s%n", jour.toString(), valeur, barre);
+            LOGGER.info(String.format("%10s | %8.2f€ | %s", jour.toString(), valeur, barre));
         });
     }
     @Override

@@ -219,7 +219,7 @@ public class Portefeuille {
     public List<Action> getActionsSortedByName() {
         return this.mapActions.keySet().stream()
                 .sorted(Comparator.comparing(Action::getLibelle))
-                .collect(java.util.stream.Collectors.toList());
+                .toList();
     }
 
     public float calculerValeurTotale(Jour jour) {
